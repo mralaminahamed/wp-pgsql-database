@@ -205,7 +205,7 @@ class WP_PgSQL_Translator {
 		while ( ! $this->is_eof() ) {
 			$tok = $this->current();
 
-			if ( $tok->is_keyword( 'ON' ) && $this->peek_significant( 1 )?->is_keyword( 'DUPLICATE' ) ) {
+			if ( $tok->is_keyword( 'ON' ) && $this->peek_significant( 1 )->is_keyword( 'DUPLICATE' ) ) {
 				// Skip ON DUPLICATE KEY UPDATE.
 				$this->advance(); // ON
 				$this->skip_keyword( 'DUPLICATE' );

@@ -1,19 +1,29 @@
 <?php
 /**
+ * WP PostgreSQL Database
+ *
+ * Adds PostgreSQL database driver support to WordPress via a db.php drop-in,
+ * enabling WordPress to run on PostgreSQL without any code changes to core,
+ * plugins, or themes. Includes MySQL to PostgreSQL query translation.
+ *
+ * @link              https://github.com/mralaminahamed/wp-pgsql-database
+ * @since             1.0.0
+ * @package           WP_PgSQL_Database
+ *
+ * @wordpress-plugin
  * Plugin Name:       WP PostgreSQL Database
- * Plugin URI:        https://github.com/your-username/wp-pgsql-database
+ * Plugin URI:        https://github.com/mralaminahamed/wp-pgsql-database
  * Description:       Adds PostgreSQL database driver support to WordPress via a db.php drop-in, enabling WordPress to run on PostgreSQL without code changes.
  * Version:           1.0.0
- * Requires at least: 6.0
- * Requires PHP:      8.0
- * Author:            Your Name
- * Author URI:        https://yourwebsite.com
- * License:           GPL-2.0-or-later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Author:            Al Amin Ahamed
+ * Author URI:        https://alaminahamed.com
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       wp-pgsql-database
  * Domain Path:       /languages
- *
- * @package WP_PgSQL_Database
+ * Requires at least: 6.0
+ * Tested up to:      6.9
+ * Requires PHP:      7.4
  */
 
 declare( strict_types=1 );
@@ -45,5 +55,5 @@ add_action(
 );
 
 // Activation / deactivation hooks.
-register_activation_hook( __FILE__, [ \WP_PgSQL_Database\Migration\Installer::class, 'activate' ] );
-register_deactivation_hook( __FILE__, [ \WP_PgSQL_Database\Migration\Installer::class, 'deactivate' ] );
+register_activation_hook( __FILE__, [ \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'activate' ] );
+register_deactivation_hook( __FILE__, [ \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'deactivate' ] );

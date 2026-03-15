@@ -85,6 +85,7 @@ class WP_PgSQL_Installer {
 	public static function remove_dropin(): bool {
 		if ( ! file_exists( WP_PGSQL_DB_DROPIN_DEST ) ) {
 			delete_option( 'wp_pgsql_db_dropin_installed' );
+
 			return true;
 		}
 
@@ -141,7 +142,7 @@ class WP_PgSQL_Installer {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$installed = file_get_contents( WP_PGSQL_DB_DROPIN_DEST );
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$template  = file_get_contents( WP_PGSQL_DB_DROPIN_SOURCE );
+		$template = file_get_contents( WP_PGSQL_DB_DROPIN_SOURCE );
 
 		if ( false === $installed || false === $template ) {
 			return false;

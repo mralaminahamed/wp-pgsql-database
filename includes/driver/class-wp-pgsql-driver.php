@@ -78,12 +78,12 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 				$dsn,
 				$user,
 				$password,
-				[
+				array(
 					PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
 					PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
 					PDO::ATTR_EMULATE_PREPARES   => false,
 					PDO::ATTR_STRINGIFY_FETCHES  => false,
-				]
+				)
 			);
 
 			// Set session timezone to UTC to match WordPress expectations.
@@ -92,6 +92,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 			return true;
 		} catch ( PDOException $e ) {
 			$this->last_error = $e->getMessage();
+
 			return false;
 		}
 	}
@@ -102,6 +103,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 	public function query( string $sql ): mixed {
 		if ( null === $this->pdo ) {
 			$this->last_error = 'No active database connection.';
+
 			return false;
 		}
 
@@ -122,6 +124,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 			return $statement;
 		} catch ( PDOException $e ) {
 			$this->last_error = $e->getMessage();
+
 			return false;
 		}
 	}
@@ -138,7 +141,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 		// PDO::quote() wraps with quotes; strip them to match wpdb behaviour.
 		$quoted = $this->pdo->quote( $value );
 
-		return substr( $quoted, 1, -1 );
+		return substr( $quoted, 1, - 1 );
 	}
 
 	/**
@@ -148,10 +151,10 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 	 */
 	public function get_results(): array {
 		if ( null === $this->last_statement ) {
-			return [];
+			return array();
 		}
 
-		return $this->last_statement->fetchAll( PDO::FETCH_OBJ ) ?: [];
+		return $this->last_statement->fetchAll( PDO::FETCH_OBJ ) ?: array();
 	}
 
 	/**
@@ -171,9 +174,11 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 
 		try {
 			$id = $this->pdo->lastInsertId( $sequence_name ?: null );
+
 			return is_numeric( $id ) ? (int) $id : $id;
 		} catch ( PDOException $e ) {
 			$this->last_error = $e->getMessage();
+
 			return 0;
 		}
 	}
@@ -212,6 +217,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 			return $this->pdo->beginTransaction();
 		} catch ( PDOException $e ) {
 			$this->last_error = $e->getMessage();
+
 			return false;
 		}
 	}
@@ -228,6 +234,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 			return $this->pdo->commit();
 		} catch ( PDOException $e ) {
 			$this->last_error = $e->getMessage();
+
 			return false;
 		}
 	}
@@ -244,6 +251,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 			return $this->pdo->rollBack();
 		} catch ( PDOException $e ) {
 			$this->last_error = $e->getMessage();
+
 			return false;
 		}
 	}
@@ -257,8 +265,9 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 		}
 
 		try {
-			$stmt    = $this->pdo->query( 'SELECT version()' );
-			$row     = $stmt ? $stmt->fetch( PDO::FETCH_NUM ) : false;
+			$stmt = $this->pdo->query( 'SELECT version()' );
+			$row  = $stmt ? $stmt->fetch( PDO::FETCH_NUM ) : false;
+
 			return $row ? (string) $row[0] : '';
 		} catch ( PDOException $e ) {
 			return '';

@@ -32,59 +32,59 @@ class WP_PgSQL_Schema_Mapper {
 	 *
 	 * @var array<string, string>
 	 */
-	private const TYPE_MAP = [
+	private const TYPE_MAP = array(
 		// Integer types.
-		'TINYINT(1)'   => 'BOOLEAN',
-		'TINYINT'      => 'SMALLINT',
-		'SMALLINT'     => 'SMALLINT',
-		'MEDIUMINT'    => 'INTEGER',
-		'INT'          => 'INTEGER',
-		'INTEGER'      => 'INTEGER',
-		'BIGINT'       => 'BIGINT',
+		'TINYINT(1)' => 'BOOLEAN',
+		'TINYINT'    => 'SMALLINT',
+		'SMALLINT'   => 'SMALLINT',
+		'MEDIUMINT'  => 'INTEGER',
+		'INT'        => 'INTEGER',
+		'INTEGER'    => 'INTEGER',
+		'BIGINT'     => 'BIGINT',
 
 		// Floating point.
-		'FLOAT'        => 'REAL',
-		'DOUBLE'       => 'DOUBLE PRECISION',
-		'DECIMAL'      => 'DECIMAL',
-		'NUMERIC'      => 'NUMERIC',
+		'FLOAT'      => 'REAL',
+		'DOUBLE'     => 'DOUBLE PRECISION',
+		'DECIMAL'    => 'DECIMAL',
+		'NUMERIC'    => 'NUMERIC',
 
 		// String types.
-		'CHAR'         => 'CHAR',
-		'VARCHAR'      => 'VARCHAR',
-		'TINYTEXT'     => 'TEXT',
-		'TEXT'         => 'TEXT',
-		'MEDIUMTEXT'   => 'TEXT',
-		'LONGTEXT'     => 'TEXT',
+		'CHAR'       => 'CHAR',
+		'VARCHAR'    => 'VARCHAR',
+		'TINYTEXT'   => 'TEXT',
+		'TEXT'       => 'TEXT',
+		'MEDIUMTEXT' => 'TEXT',
+		'LONGTEXT'   => 'TEXT',
 
 		// Binary / blob types (mapped to bytea or text).
-		'BINARY'       => 'BYTEA',
-		'VARBINARY'    => 'BYTEA',
-		'TINYBLOB'     => 'BYTEA',
-		'BLOB'         => 'BYTEA',
-		'MEDIUMBLOB'   => 'BYTEA',
-		'LONGBLOB'     => 'BYTEA',
+		'BINARY'     => 'BYTEA',
+		'VARBINARY'  => 'BYTEA',
+		'TINYBLOB'   => 'BYTEA',
+		'BLOB'       => 'BYTEA',
+		'MEDIUMBLOB' => 'BYTEA',
+		'LONGBLOB'   => 'BYTEA',
 
 		// Date/time types.
-		'DATE'         => 'DATE',
-		'TIME'         => 'TIME',
-		'DATETIME'     => 'TIMESTAMP',
-		'TIMESTAMP'    => 'TIMESTAMP',
-		'YEAR'         => 'SMALLINT',
+		'DATE'       => 'DATE',
+		'TIME'       => 'TIME',
+		'DATETIME'   => 'TIMESTAMP',
+		'TIMESTAMP'  => 'TIMESTAMP',
+		'YEAR'       => 'SMALLINT',
 
 		// JSON.
-		'JSON'         => 'JSONB',
+		'JSON'       => 'JSONB',
 
 		// Enum / set (flattened to TEXT + constraint).
-		'ENUM'         => 'TEXT',
-		'SET'          => 'TEXT',
-	];
+		'ENUM'       => 'TEXT',
+		'SET'        => 'TEXT',
+	);
 
 	/**
 	 * Patterns stripped wholesale from MySQL DDL.
 	 *
 	 * @var string[]
 	 */
-	private const STRIP_PATTERNS = [
+	private const STRIP_PATTERNS = array(
 		'/\s+UNSIGNED/i',
 		'/\s+ZEROFILL/i',
 		'/\s+CHARACTER\s+SET\s+\w+/i',
@@ -96,12 +96,13 @@ class WP_PgSQL_Schema_Mapper {
 		'/\s+AUTO_INCREMENT\s*=\s*\d+/i',
 		'/\s+COMMENT\s*=\s*\'[^\']*\'/i',
 		'/\s+KEY_BLOCK_SIZE\s*=\s*\d+/i',
-	];
+	);
 
 	/**
 	 * Rewrite a MySQL DDL statement for PostgreSQL.
 	 *
 	 * @param string $sql MySQL DDL SQL.
+	 *
 	 * @return string PostgreSQL-compatible DDL.
 	 */
 	public function rewrite( string $sql ): string {
@@ -126,6 +127,7 @@ class WP_PgSQL_Schema_Mapper {
 	 * Apply the type mapping to all column definitions in a CREATE TABLE statement.
 	 *
 	 * @param string $sql MySQL DDL.
+	 *
 	 * @return string Rewritten DDL.
 	 */
 	private function remap_types( string $sql ): string {
@@ -133,7 +135,7 @@ class WP_PgSQL_Schema_Mapper {
 			// Build a regex that matches the type (with optional precision/scale).
 			$escaped = preg_quote( $mysql_type, '/' );
 
-			if ( in_array( $mysql_type, [ 'TINYINT(1)', 'JSON' ], true ) ) {
+			if ( in_array( $mysql_type, array( 'TINYINT(1)', 'JSON' ), true ) ) {
 				// Exact match for parameterised types.
 				$sql = preg_replace( "/\b{$escaped}\b/i", $pgsql_type, $sql ) ?? $sql;
 			} else {
@@ -149,6 +151,7 @@ class WP_PgSQL_Schema_Mapper {
 	 * Convert AUTO_INCREMENT column definitions to SERIAL or BIGSERIAL.
 	 *
 	 * @param string $sql MySQL DDL.
+	 *
 	 * @return string Rewritten DDL.
 	 */
 	private function rewrite_auto_increment( string $sql ): string {
@@ -176,6 +179,7 @@ class WP_PgSQL_Schema_Mapper {
 	 * Rewrite MySQL-specific index types to PostgreSQL equivalents.
 	 *
 	 * @param string $sql MySQL DDL.
+	 *
 	 * @return string Rewritten DDL.
 	 */
 	private function rewrite_indexes( string $sql ): string {

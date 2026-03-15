@@ -101,6 +101,7 @@ final class WP_PgSQL_Database {
 	 * Enqueue admin-side CSS and JS assets.
 	 *
 	 * @param string $hook_suffix Current admin page hook suffix.
+	 *
 	 * @return void
 	 */
 	public function enqueue_admin_assets( string $hook_suffix ): void {
@@ -181,5 +182,6 @@ final class WP_PgSQL_Database {
 	 *
 	 * @return void
 	 */
-	private function __clone() {}
+	private function __clone() {
+	}
 }

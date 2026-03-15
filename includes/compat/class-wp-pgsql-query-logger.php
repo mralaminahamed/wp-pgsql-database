@@ -36,7 +36,7 @@ class WP_PgSQL_Query_Logger {
 	 *
 	 * @var array<int, array{sql: string, translated: string, duration: float, caller: string}>
 	 */
-	private array $log = [];
+	private array $log = array();
 
 	/**
 	 * Maximum number of entries to retain in-memory.
@@ -49,8 +49,8 @@ class WP_PgSQL_Query_Logger {
 	 * Private constructor.
 	 */
 	private function __construct() {
-		add_filter( 'query', [ $this, 'capture_query_start' ], 1 );
-		add_action( 'shutdown', [ $this, 'flush_to_log_file' ] );
+		add_filter( 'query', array( $this, 'capture_query_start' ), 1 );
+		add_action( 'shutdown', array( $this, 'flush_to_log_file' ) );
 	}
 
 	/**
@@ -70,6 +70,7 @@ class WP_PgSQL_Query_Logger {
 	 * Capture a query passing through the `query` filter.
 	 *
 	 * @param string $sql Incoming SQL string.
+	 *
 	 * @return string Unmodified SQL (this filter must be transparent).
 	 */
 	public function capture_query_start( string $sql ): string {
@@ -77,12 +78,12 @@ class WP_PgSQL_Query_Logger {
 			return $sql;
 		}
 
-		$this->log[] = [
+		$this->log[] = array(
 			'sql'        => $sql,
 			'translated' => '',
 			'duration'   => microtime( true ),
 			'caller'     => $this->get_caller(),
-		];
+		);
 
 		return $sql;
 	}
@@ -91,6 +92,7 @@ class WP_PgSQL_Query_Logger {
 	 * Update the last log entry with its duration after execution.
 	 *
 	 * @param string $translated Translated SQL string.
+	 *
 	 * @return void
 	 */
 	public function capture_query_end( string $translated ): void {
@@ -98,7 +100,7 @@ class WP_PgSQL_Query_Logger {
 			return;
 		}
 
-		$last              = &$this->log[ count( $this->log ) - 1 ];
+		$last               = &$this->log[ count( $this->log ) - 1 ];
 		$last['translated'] = $translated;
 		$last['duration']   = microtime( true ) - $last['duration'];
 	}
@@ -159,5 +161,6 @@ class WP_PgSQL_Query_Logger {
 	 *
 	 * @return void
 	 */
-	private function __clone() {}
+	private function __clone() {
+	}
 }

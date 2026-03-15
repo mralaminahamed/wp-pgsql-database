@@ -48,7 +48,7 @@ class WP_PgSQL_Translator {
 	 *
 	 * @var WP_PgSQL_Token[]
 	 */
-	private array $tokens = [];
+	private array $tokens = array();
 
 	/**
 	 * Current token index.
@@ -70,6 +70,7 @@ class WP_PgSQL_Translator {
 	 * Translate a MySQL SQL string to PostgreSQL-compatible SQL.
 	 *
 	 * @param string $sql Raw MySQL SQL.
+	 *
 	 * @return string Translated PostgreSQL SQL.
 	 */
 	public function translate( string $sql ): string {
@@ -147,25 +148,30 @@ class WP_PgSQL_Translator {
 				// AUTO_INCREMENT is part of a column definition; replaced in schema mapper.
 				// Here we drop it from DML contexts.
 				$this->advance();
+
 				return '';
 
 			case 'UNSIGNED':
 			case 'ZEROFILL':
 				// PostgreSQL has no UNSIGNED; drop silently.
 				$this->advance();
+
 				return '';
 
 			case 'REGEXP':
 			case 'RLIKE':
 				$this->advance();
+
 				return '~';
 
 			case 'IFNULL':
 				$this->advance();
+
 				return 'COALESCE';
 
 			case 'ISNULL':
 				$this->advance();
+
 				return '( IS NULL )';
 
 			case 'LIMIT':
@@ -173,6 +179,7 @@ class WP_PgSQL_Translator {
 
 			default:
 				$this->advance();
+
 				return $token->value;
 		}
 	}
@@ -217,7 +224,7 @@ class WP_PgSQL_Translator {
 				break;
 			}
 
-			$body .= $tok->type === WP_PgSQL_Token::TYPE_IDENTIFIER && str_starts_with( $tok->value, '`' )
+			$body .= WP_PgSQL_Token::TYPE_IDENTIFIER === $tok->type && str_starts_with( $tok->value, '`' )
 				? '"' . trim( $tok->value, '`' ) . '"'
 				: $tok->value;
 
@@ -262,6 +269,7 @@ class WP_PgSQL_Translator {
 			$this->skip_whitespace();
 			$second = $this->current()->value;
 			$this->advance();
+
 			return "LIMIT {$second} OFFSET {$first}";
 		}
 
@@ -276,6 +284,7 @@ class WP_PgSQL_Translator {
 	 * Translate MySQL SHOW statements to information_schema equivalents.
 	 *
 	 * @param string $sql Original SQL.
+	 *
 	 * @return string|null Translated SQL, or null if not a translatable SHOW.
 	 */
 	private function translate_show_statement( string $sql ): ?string {
@@ -284,12 +293,14 @@ class WP_PgSQL_Translator {
 		// SHOW TABLES [LIKE 'pattern'].
 		if ( preg_match( '/^SHOW\s+TABLES(?:\s+LIKE\s+\'([^\']+)\')?/i', $sql, $m ) ) {
 			$like = isset( $m[1] ) ? " AND table_name LIKE '" . $m[1] . "'" : '';
+
 			return "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'{$like} ORDER BY table_name";
 		}
 
 		// SHOW COLUMNS FROM `table` / SHOW FIELDS FROM `table`.
 		if ( preg_match( '/^SHOW\s+(?:COLUMNS|FIELDS)\s+FROM\s+[`"]?(\w+)[`"]?/i', $sql, $m ) ) {
 			$table = $m[1];
+
 			return "SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_name = '{$table}' ORDER BY ordinal_position";
 		}
 
@@ -301,6 +312,7 @@ class WP_PgSQL_Translator {
 		// SHOW INDEX FROM `table`.
 		if ( preg_match( '/^SHOW\s+(?:INDEX|INDEXES|KEYS)\s+FROM\s+[`"]?(\w+)[`"]?/i', $sql, $m ) ) {
 			$table = $m[1];
+
 			return "SELECT indexname AS Key_name, indexdef FROM pg_indexes WHERE tablename = '{$table}'";
 		}
 
@@ -311,7 +323,7 @@ class WP_PgSQL_Translator {
 
 		// SHOW VARIABLES.
 		if ( preg_match( '/^SHOW\s+(?:GLOBAL\s+|SESSION\s+)?VARIABLES/i', $sql ) ) {
-			return "SELECT name AS Variable_name, setting AS Value FROM pg_settings";
+			return 'SELECT name AS Variable_name, setting AS Value FROM pg_settings';
 		}
 
 		return null;
@@ -336,7 +348,7 @@ class WP_PgSQL_Translator {
 	 * @return void
 	 */
 	private function advance(): void {
-		++ $this->index;
+		++$this->index;
 	}
 
 	/**
@@ -345,7 +357,7 @@ class WP_PgSQL_Translator {
 	 * @return bool
 	 */
 	private function is_eof(): bool {
-		return $this->tokens[ $this->index ]->type === WP_PgSQL_Token::TYPE_EOF;
+		return WP_PgSQL_Token::TYPE_EOF === $this->tokens[ $this->index ]->type;
 	}
 
 	/**
@@ -363,6 +375,7 @@ class WP_PgSQL_Translator {
 	 * Skip a specific keyword (with any surrounding whitespace).
 	 *
 	 * @param string $keyword Keyword to skip.
+	 *
 	 * @return void
 	 */
 	private function skip_keyword( string $keyword ): void {
@@ -376,6 +389,7 @@ class WP_PgSQL_Translator {
 	 * Peek at the Nth significant (non-whitespace, non-comment) token ahead.
 	 *
 	 * @param int $offset Number of significant tokens to look ahead.
+	 *
 	 * @return WP_PgSQL_Token|null
 	 */
 	private function peek_significant( int $offset ): ?WP_PgSQL_Token {
@@ -384,12 +398,12 @@ class WP_PgSQL_Translator {
 
 		while ( isset( $this->tokens[ $i ] ) ) {
 			if ( $this->tokens[ $i ]->is_significant() ) {
-				++ $count;
+				++$count;
 				if ( $count === $offset ) {
 					return $this->tokens[ $i ];
 				}
 			}
-			++ $i;
+			++$i;
 		}
 
 		return null;
@@ -403,12 +417,13 @@ class WP_PgSQL_Translator {
 	private function collect_to_eof(): string {
 		$out = '';
 		while ( ! $this->is_eof() ) {
-			$tok = $this->current();
-			$out .= $tok->type === WP_PgSQL_Token::TYPE_IDENTIFIER && str_starts_with( $tok->value, '`' )
+			$tok  = $this->current();
+			$out .= WP_PgSQL_Token::TYPE_IDENTIFIER === $tok->type && str_starts_with( $tok->value, '`' )
 				? '"' . trim( $tok->value, '`' ) . '"'
 				: $tok->value;
 			$this->advance();
 		}
+
 		return $out;
 	}
 }

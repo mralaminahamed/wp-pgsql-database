@@ -36,8 +36,8 @@ class WP_PgSQL_Health_Check {
 	 * Private constructor.
 	 */
 	private function __construct() {
-		add_filter( 'site_status_tests', [ $this, 'register_tests' ] );
-		add_filter( 'debug_information', [ $this, 'add_debug_info' ] );
+		add_filter( 'site_status_tests', array( $this, 'register_tests' ) );
+		add_filter( 'debug_information', array( $this, 'add_debug_info' ) );
 	}
 
 	/**
@@ -57,18 +57,19 @@ class WP_PgSQL_Health_Check {
 	 * Register Site Health tests.
 	 *
 	 * @param array<string, mixed> $tests Existing tests.
+	 *
 	 * @return array<string, mixed>
 	 */
 	public function register_tests( array $tests ): array {
-		$tests['direct']['wp_pgsql_dropin'] = [
+		$tests['direct']['wp_pgsql_dropin'] = array(
 			'label' => __( 'PostgreSQL drop-in', 'wp-pgsql-database' ),
-			'test'  => [ $this, 'test_dropin' ],
-		];
+			'test'  => array( $this, 'test_dropin' ),
+		);
 
-		$tests['direct']['wp_pgsql_connection'] = [
+		$tests['direct']['wp_pgsql_connection'] = array(
 			'label' => __( 'PostgreSQL connection', 'wp-pgsql-database' ),
-			'test'  => [ $this, 'test_connection' ],
-		];
+			'test'  => array( $this, 'test_connection' ),
+		);
 
 		return $tests;
 	}
@@ -83,10 +84,13 @@ class WP_PgSQL_Health_Check {
 		$current = WP_PgSQL_Installer::is_dropin_current();
 
 		if ( ! $active ) {
-			return [
+			return array(
 				'label'       => __( 'PostgreSQL drop-in is not installed', 'wp-pgsql-database' ),
 				'status'      => 'critical',
-				'badge'       => [ 'label' => __( 'Database', 'wp-pgsql-database' ), 'color' => 'red' ],
+				'badge'       => array(
+					'label' => __( 'Database', 'wp-pgsql-database' ),
+					'color' => 'red',
+				),
 				'description' => __( 'The wp-content/db.php drop-in is missing. PostgreSQL driver is inactive.', 'wp-pgsql-database' ),
 				'actions'     => sprintf(
 					'<a href="%s">%s</a>',
@@ -94,14 +98,17 @@ class WP_PgSQL_Health_Check {
 					esc_html__( 'Install drop-in', 'wp-pgsql-database' )
 				),
 				'test'        => 'wp_pgsql_dropin',
-			];
+			);
 		}
 
 		if ( ! $current ) {
-			return [
+			return array(
 				'label'       => __( 'PostgreSQL drop-in needs updating', 'wp-pgsql-database' ),
 				'status'      => 'recommended',
-				'badge'       => [ 'label' => __( 'Database', 'wp-pgsql-database' ), 'color' => 'orange' ],
+				'badge'       => array(
+					'label' => __( 'Database', 'wp-pgsql-database' ),
+					'color' => 'orange',
+				),
 				'description' => __( 'A newer version of the db.php drop-in is available.', 'wp-pgsql-database' ),
 				'actions'     => sprintf(
 					'<a href="%s">%s</a>',
@@ -109,17 +116,20 @@ class WP_PgSQL_Health_Check {
 					esc_html__( 'Update drop-in', 'wp-pgsql-database' )
 				),
 				'test'        => 'wp_pgsql_dropin',
-			];
+			);
 		}
 
-		return [
+		return array(
 			'label'       => __( 'PostgreSQL drop-in is active and current', 'wp-pgsql-database' ),
 			'status'      => 'good',
-			'badge'       => [ 'label' => __( 'Database', 'wp-pgsql-database' ), 'color' => 'blue' ],
+			'badge'       => array(
+				'label' => __( 'Database', 'wp-pgsql-database' ),
+				'color' => 'blue',
+			),
 			'description' => __( 'The wp-content/db.php drop-in is installed and up to date.', 'wp-pgsql-database' ),
 			'actions'     => '',
 			'test'        => 'wp_pgsql_dropin',
-		];
+		);
 	}
 
 	/**
@@ -133,73 +143,83 @@ class WP_PgSQL_Health_Check {
 		$is_pgsql = $wpdb instanceof \WP_PgSQL_Database\Database\WP_PgSQL_Db;
 
 		if ( ! $is_pgsql ) {
-			return [
+			return array(
 				'label'       => __( 'Not running on PostgreSQL driver', 'wp-pgsql-database' ),
 				'status'      => 'recommended',
-				'badge'       => [ 'label' => __( 'Database', 'wp-pgsql-database' ), 'color' => 'orange' ],
+				'badge'       => array(
+					'label' => __( 'Database', 'wp-pgsql-database' ),
+					'color' => 'orange',
+				),
 				'description' => __( 'WordPress is using the default MySQL driver. Define DB_ENGINE=pgsql in wp-config.php to activate PostgreSQL.', 'wp-pgsql-database' ),
 				'actions'     => '',
 				'test'        => 'wp_pgsql_connection',
-			];
+			);
 		}
 
 		$connected = $wpdb->check_connection( false );
 
 		if ( ! $connected ) {
-			return [
+			return array(
 				'label'       => __( 'PostgreSQL connection is unavailable', 'wp-pgsql-database' ),
 				'status'      => 'critical',
-				'badge'       => [ 'label' => __( 'Database', 'wp-pgsql-database' ), 'color' => 'red' ],
+				'badge'       => array(
+					'label' => __( 'Database', 'wp-pgsql-database' ),
+					'color' => 'red',
+				),
 				'description' => __( 'Could not reach the PostgreSQL server. Check DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME.', 'wp-pgsql-database' ),
 				'actions'     => '',
 				'test'        => 'wp_pgsql_connection',
-			];
+			);
 		}
 
-		return [
+		return array(
 			'label'       => __( 'PostgreSQL connection is active', 'wp-pgsql-database' ),
 			'status'      => 'good',
-			'badge'       => [ 'label' => __( 'Database', 'wp-pgsql-database' ), 'color' => 'blue' ],
+			'badge'       => array(
+				'label' => __( 'Database', 'wp-pgsql-database' ),
+				'color' => 'blue',
+			),
 			'description' => sprintf(
-				/* translators: %s: server version string */
+			/* translators: %s: server version string */
 				__( 'Connected to PostgreSQL. Server: %s', 'wp-pgsql-database' ),
 				esc_html( $wpdb->db_version() )
 			),
 			'actions'     => '',
 			'test'        => 'wp_pgsql_connection',
-		];
+		);
 	}
 
 	/**
 	 * Add driver info to the Site Health debug information panel.
 	 *
 	 * @param array<string, mixed> $info Existing debug info.
+	 *
 	 * @return array<string, mixed>
 	 */
 	public function add_debug_info( array $info ): array {
 		global $wpdb;
 
-		$info['wp-pgsql-database'] = [
+		$info['wp-pgsql-database'] = array(
 			'label'  => __( 'PostgreSQL Database Driver', 'wp-pgsql-database' ),
-			'fields' => [
-				'plugin_version' => [
+			'fields' => array(
+				'plugin_version' => array(
 					'label' => __( 'Plugin version', 'wp-pgsql-database' ),
 					'value' => WP_PGSQL_DB_VERSION,
-				],
-				'dropin_active' => [
+				),
+				'dropin_active'  => array(
 					'label' => __( 'Drop-in active', 'wp-pgsql-database' ),
 					'value' => WP_PgSQL_Installer::is_dropin_active() ? __( 'Yes', 'wp-pgsql-database' ) : __( 'No', 'wp-pgsql-database' ),
-				],
-				'db_engine' => [
+				),
+				'db_engine'      => array(
 					'label' => __( 'DB_ENGINE', 'wp-pgsql-database' ),
 					'value' => defined( 'DB_ENGINE' ) ? DB_ENGINE : __( 'Not defined', 'wp-pgsql-database' ),
-				],
-				'server_version' => [
+				),
+				'server_version' => array(
 					'label' => __( 'PostgreSQL version', 'wp-pgsql-database' ),
 					'value' => ( $wpdb instanceof \WP_PgSQL_Database\Database\WP_PgSQL_Db ) ? $wpdb->db_version() : __( 'N/A', 'wp-pgsql-database' ),
-				],
-			],
-		];
+				),
+			),
+		);
 
 		return $info;
 	}
@@ -209,5 +229,6 @@ class WP_PgSQL_Health_Check {
 	 *
 	 * @return void
 	 */
-	private function __clone() {}
+	private function __clone() {
+	}
 }

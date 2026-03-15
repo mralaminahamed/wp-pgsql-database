@@ -23,15 +23,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class WP_PgSQL_Token {
 
 	// Token type constants.
-	public const TYPE_KEYWORD    = 'KEYWORD';
-	public const TYPE_IDENTIFIER = 'IDENTIFIER';
-	public const TYPE_STRING     = 'STRING';
-	public const TYPE_NUMBER     = 'NUMBER';
-	public const TYPE_OPERATOR   = 'OPERATOR';
+	public const TYPE_KEYWORD     = 'KEYWORD';
+	public const TYPE_IDENTIFIER  = 'IDENTIFIER';
+	public const TYPE_STRING      = 'STRING';
+	public const TYPE_NUMBER      = 'NUMBER';
+	public const TYPE_OPERATOR    = 'OPERATOR';
 	public const TYPE_PUNCTUATION = 'PUNCTUATION';
-	public const TYPE_WHITESPACE = 'WHITESPACE';
-	public const TYPE_COMMENT    = 'COMMENT';
-	public const TYPE_EOF        = 'EOF';
+	public const TYPE_WHITESPACE  = 'WHITESPACE';
+	public const TYPE_COMMENT     = 'COMMENT';
+	public const TYPE_EOF         = 'EOF';
 
 	/**
 	 * Token type (one of the TYPE_* constants above).
@@ -59,13 +59,13 @@ final class WP_PgSQL_Token {
 	 *
 	 * @var int
 	 */
-	public readonly int $offset;
+	public int $offset;
 
 	/**
 	 * WP_PgSQL_Token constructor.
 	 *
-	 * @param string $type   Token type.
-	 * @param string $value  Raw token value.
+	 * @param string $type Token type.
+	 * @param string $value Raw token value.
 	 * @param int    $offset Byte offset in source.
 	 */
 	public function __construct( string $type, string $value, int $offset = 0 ) {
@@ -79,6 +79,7 @@ final class WP_PgSQL_Token {
 	 * Whether this token is a keyword matching the given value.
 	 *
 	 * @param string ...$keywords One or more keywords to test (case-insensitive).
+	 *
 	 * @return bool
 	 */
 	public function is_keyword( string ...$keywords ): bool {
@@ -101,7 +102,7 @@ final class WP_PgSQL_Token {
 	 * @return bool
 	 */
 	public function is_significant(): bool {
-		return ! in_array( $this->type, [ self::TYPE_WHITESPACE, self::TYPE_COMMENT, self::TYPE_EOF ], true );
+		return ! in_array( $this->type, array( self::TYPE_WHITESPACE, self::TYPE_COMMENT, self::TYPE_EOF ), true );
 	}
 
 	/**

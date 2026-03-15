@@ -34,8 +34,8 @@ class WP_PgSQL_Diagnostics {
 	 * Private constructor.
 	 */
 	private function __construct() {
-		add_action( 'admin_bar_menu', [ $this, 'add_toolbar_node' ], 999 );
-		add_action( 'wp_ajax_wp_pgsql_query_log', [ $this, 'ajax_query_log' ] );
+		add_action( 'admin_bar_menu', array( $this, 'add_toolbar_node' ), 999 );
+		add_action( 'wp_ajax_wp_pgsql_query_log', array( $this, 'ajax_query_log' ) );
 	}
 
 	/**
@@ -55,6 +55,7 @@ class WP_PgSQL_Diagnostics {
 	 * Add a PostgreSQL diagnostics node to the admin toolbar.
 	 *
 	 * @param \WP_Admin_Bar $wp_admin_bar Admin bar instance.
+	 *
 	 * @return void
 	 */
 	public function add_toolbar_node( \WP_Admin_Bar $wp_admin_bar ): void {
@@ -71,17 +72,17 @@ class WP_PgSQL_Diagnostics {
 		$query_count = is_array( $wpdb->queries ) ? count( $wpdb->queries ) : 0;
 
 		$wp_admin_bar->add_node(
-			[
+			array(
 				'id'    => 'wp-pgsql-database',
 				'title' => sprintf(
-					/* translators: %d: number of PostgreSQL queries */
+				/* translators: %d: number of PostgreSQL queries */
 					'PgSQL: %d %s',
 					$query_count,
 					_n( 'query', 'queries', $query_count, 'wp-pgsql-database' )
 				),
 				'href'  => admin_url( 'tools.php?page=wp-pgsql-database' ),
-				'meta'  => [ 'title' => __( 'PostgreSQL Database Driver', 'wp-pgsql-database' ) ],
-			]
+				'meta'  => array( 'title' => __( 'PostgreSQL Database Driver', 'wp-pgsql-database' ) ),
+			)
 		);
 	}
 
@@ -94,25 +95,25 @@ class WP_PgSQL_Diagnostics {
 		check_ajax_referer( 'wp_pgsql_database_admin' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Insufficient permissions.', 'wp-pgsql-database' ) ], 403 );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wp-pgsql-database' ) ), 403 );
 		}
 
 		$logger = WP_PgSQL_Query_Logger::get_instance();
 		$log    = $logger->get_log();
 
 		wp_send_json_success(
-			[
+			array(
 				'count'   => count( $log ),
 				'entries' => array_map(
-					fn( array $entry ) => [
+					fn( array $entry ) => array(
 						'sql'        => $entry['sql'],
 						'translated' => $entry['translated'],
 						'duration'   => round( $entry['duration'] * 1000, 3 ),
 						'caller'     => $entry['caller'],
-					],
+					),
 					$log
 				),
-			]
+			)
 		);
 	}
 
@@ -121,5 +122,6 @@ class WP_PgSQL_Diagnostics {
 	 *
 	 * @return void
 	 */
-	private function __clone() {}
+	private function __clone() {
+	}
 }

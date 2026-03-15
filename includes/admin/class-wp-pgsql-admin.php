@@ -42,9 +42,9 @@ class WP_PgSQL_Admin {
 	 * Private constructor.
 	 */
 	private function __construct() {
-		add_action( 'admin_menu', [ $this, 'register_menu' ] );
-		add_action( 'admin_post_wp_pgsql_install_dropin', [ $this, 'handle_install_dropin' ] );
-		add_action( 'admin_post_wp_pgsql_remove_dropin', [ $this, 'handle_remove_dropin' ] );
+		add_action( 'admin_menu', array( $this, 'register_menu' ) );
+		add_action( 'admin_post_wp_pgsql_install_dropin', array( $this, 'handle_install_dropin' ) );
+		add_action( 'admin_post_wp_pgsql_remove_dropin', array( $this, 'handle_remove_dropin' ) );
 	}
 
 	/**
@@ -71,7 +71,7 @@ class WP_PgSQL_Admin {
 			__( 'PostgreSQL DB', 'wp-pgsql-database' ),
 			'manage_options',
 			'wp-pgsql-database',
-			[ $this, 'render_page' ]
+			array( $this, 'render_page' )
 		);
 	}
 
@@ -102,44 +102,44 @@ class WP_PgSQL_Admin {
 					<h2><?php esc_html_e( 'Drop-in Status', 'wp-pgsql-database' ); ?></h2>
 					<table class="widefat striped">
 						<tbody>
-							<tr>
-								<td><?php esc_html_e( 'db.php installed', 'wp-pgsql-database' ); ?></td>
-								<td><?php echo $dropin_active ? '<span class="wp-pgsql-badge success">' . esc_html__( 'Active', 'wp-pgsql-database' ) . '</span>' : '<span class="wp-pgsql-badge error">' . esc_html__( 'Not installed', 'wp-pgsql-database' ) . '</span>'; ?></td>
-							</tr>
-							<tr>
-								<td><?php esc_html_e( 'Drop-in version', 'wp-pgsql-database' ); ?></td>
-								<td><?php echo $dropin_current ? '<span class="wp-pgsql-badge success">' . esc_html__( 'Up to date', 'wp-pgsql-database' ) . '</span>' : '<span class="wp-pgsql-badge warning">' . esc_html__( 'Update available', 'wp-pgsql-database' ) . '</span>'; ?></td>
-							</tr>
-							<tr>
-								<td><?php esc_html_e( 'DB_ENGINE constant', 'wp-pgsql-database' ); ?></td>
-								<td><?php echo $engine_set ? '<span class="wp-pgsql-badge success">' . esc_html__( 'pgsql', 'wp-pgsql-database' ) . '</span>' : '<span class="wp-pgsql-badge warning">' . esc_html__( 'Not defined', 'wp-pgsql-database' ) . '</span>'; ?></td>
-							</tr>
-							<tr>
-								<td><?php esc_html_e( 'Plugin version', 'wp-pgsql-database' ); ?></td>
-								<td><?php echo esc_html( WP_PGSQL_DB_VERSION ); ?></td>
-							</tr>
+						<tr>
+							<td><?php esc_html_e( 'db.php installed', 'wp-pgsql-database' ); ?></td>
+							<td><?php echo $dropin_active ? '<span class="wp-pgsql-badge success">' . esc_html__( 'Active', 'wp-pgsql-database' ) . '</span>' : '<span class="wp-pgsql-badge error">' . esc_html__( 'Not installed', 'wp-pgsql-database' ) . '</span>'; ?></td>
+						</tr>
+						<tr>
+							<td><?php esc_html_e( 'Drop-in version', 'wp-pgsql-database' ); ?></td>
+							<td><?php echo $dropin_current ? '<span class="wp-pgsql-badge success">' . esc_html__( 'Up to date', 'wp-pgsql-database' ) . '</span>' : '<span class="wp-pgsql-badge warning">' . esc_html__( 'Update available', 'wp-pgsql-database' ) . '</span>'; ?></td>
+						</tr>
+						<tr>
+							<td><?php esc_html_e( 'DB_ENGINE constant', 'wp-pgsql-database' ); ?></td>
+							<td><?php echo $engine_set ? '<span class="wp-pgsql-badge success">' . esc_html__( 'pgsql', 'wp-pgsql-database' ) . '</span>' : '<span class="wp-pgsql-badge warning">' . esc_html__( 'Not defined', 'wp-pgsql-database' ) . '</span>'; ?></td>
+						</tr>
+						<tr>
+							<td><?php esc_html_e( 'Plugin version', 'wp-pgsql-database' ); ?></td>
+							<td><?php echo esc_html( WP_PGSQL_DB_VERSION ); ?></td>
+						</tr>
 						</tbody>
 					</table>
 
 					<div class="wp-pgsql-actions">
 						<?php if ( ! $dropin_active || ! $dropin_current ) : ?>
-						<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-							<?php wp_nonce_field( 'wp_pgsql_install_dropin' ); ?>
-							<input type="hidden" name="action" value="wp_pgsql_install_dropin">
-							<button type="submit" class="button button-primary">
-								<?php echo $dropin_active ? esc_html__( 'Update Drop-in', 'wp-pgsql-database' ) : esc_html__( 'Install Drop-in', 'wp-pgsql-database' ); ?>
-							</button>
-						</form>
+							<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+								<?php wp_nonce_field( 'wp_pgsql_install_dropin' ); ?>
+								<input type="hidden" name="action" value="wp_pgsql_install_dropin">
+								<button type="submit" class="button button-primary">
+									<?php echo $dropin_active ? esc_html__( 'Update Drop-in', 'wp-pgsql-database' ) : esc_html__( 'Install Drop-in', 'wp-pgsql-database' ); ?>
+								</button>
+							</form>
 						<?php endif; ?>
 
 						<?php if ( $dropin_active ) : ?>
-						<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-							<?php wp_nonce_field( 'wp_pgsql_remove_dropin' ); ?>
-							<input type="hidden" name="action" value="wp_pgsql_remove_dropin">
-							<button type="submit" class="button button-secondary">
-								<?php esc_html_e( 'Remove Drop-in', 'wp-pgsql-database' ); ?>
-							</button>
-						</form>
+							<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+								<?php wp_nonce_field( 'wp_pgsql_remove_dropin' ); ?>
+								<input type="hidden" name="action" value="wp_pgsql_remove_dropin">
+								<button type="submit" class="button button-secondary">
+									<?php esc_html_e( 'Remove Drop-in', 'wp-pgsql-database' ); ?>
+								</button>
+							</form>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -174,11 +174,14 @@ define( 'DB_PASSWORD', 'your_password' );</code></pre>
 		}
 
 		$notice = sanitize_key( $_GET['wp_pgsql_notice'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$map    = [
-			'dropin_installed' => [ 'success', __( 'Drop-in installed successfully.', 'wp-pgsql-database' ) ],
-			'dropin_removed'   => [ 'success', __( 'Drop-in removed.', 'wp-pgsql-database' ) ],
-			'dropin_failed'    => [ 'error',   __( 'Drop-in installation failed. Please check file permissions.', 'wp-pgsql-database' ) ],
-		];
+		$map    = array(
+			'dropin_installed' => array( 'success', __( 'Drop-in installed successfully.', 'wp-pgsql-database' ) ),
+			'dropin_removed'   => array( 'success', __( 'Drop-in removed.', 'wp-pgsql-database' ) ),
+			'dropin_failed'    => array(
+				'error',
+				__( 'Drop-in installation failed. Please check file permissions.', 'wp-pgsql-database' ),
+			),
+		);
 
 		if ( ! isset( $map[ $notice ] ) ) {
 			return;
@@ -210,7 +213,10 @@ define( 'DB_PASSWORD', 'your_password' );</code></pre>
 
 		wp_safe_redirect(
 			add_query_arg(
-				[ 'page' => 'wp-pgsql-database', 'wp_pgsql_notice' => $notice ],
+				array(
+					'page'            => 'wp-pgsql-database',
+					'wp_pgsql_notice' => $notice,
+				),
 				admin_url( 'tools.php' )
 			)
 		);
@@ -233,7 +239,10 @@ define( 'DB_PASSWORD', 'your_password' );</code></pre>
 
 		wp_safe_redirect(
 			add_query_arg(
-				[ 'page' => 'wp-pgsql-database', 'wp_pgsql_notice' => 'dropin_removed' ],
+				array(
+					'page'            => 'wp-pgsql-database',
+					'wp_pgsql_notice' => 'dropin_removed',
+				),
 				admin_url( 'tools.php' )
 			)
 		);
@@ -245,5 +254,6 @@ define( 'DB_PASSWORD', 'your_password' );</code></pre>
 	 *
 	 * @return void
 	 */
-	private function __clone() {}
+	private function __clone() {
+	}
 }

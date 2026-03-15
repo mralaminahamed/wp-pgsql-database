@@ -37,8 +37,8 @@ class WP_PgSQL_Migrator {
 	 * @return void
 	 */
 	public function run(): void {
-		$current  = (string) get_option( self::VERSION_OPTION, '0.0.0' );
-		$target   = WP_PGSQL_DB_VERSION;
+		$current = (string) get_option( self::VERSION_OPTION, '0.0.0' );
+		$target  = WP_PGSQL_DB_VERSION;
 
 		if ( version_compare( $current, $target, '>=' ) ) {
 			return;
@@ -61,12 +61,13 @@ class WP_PgSQL_Migrator {
 	 * Return a sorted list of migration methods pending since $from_version.
 	 *
 	 * @param string $from_version Currently applied version.
+	 *
 	 * @return array<string, string> Map of version => method name.
 	 */
 	private function get_pending_migrations( string $from_version ): array {
-		$all = [
+		$all = array(
 			'1.0.0' => 'migrate_to_1_0_0',
-		];
+		);
 
 		return array_filter(
 			$all,

@@ -27,10 +27,11 @@ interface WP_PgSQL_Driver_Interface {
 	/**
 	 * Open a connection to the target database.
 	 *
-	 * @param string $host     Database host (including optional port, e.g. "localhost:5432").
-	 * @param string $user     Database username.
+	 * @param string $host Database host (including optional port, e.g. "localhost:5432").
+	 * @param string $user Database username.
 	 * @param string $password Database password.
-	 * @param string $db_name  Database (schema) name.
+	 * @param string $db_name Database (schema) name.
+	 *
 	 * @return bool True on success, false on failure.
 	 */
 	public function connect( string $host, string $user, string $password, string $db_name ): bool;
@@ -39,6 +40,7 @@ interface WP_PgSQL_Driver_Interface {
 	 * Execute a translated SQL query.
 	 *
 	 * @param string $sql Translated, driver-specific SQL string.
+	 *
 	 * @return mixed Result resource, row count, or false on error.
 	 */
 	public function query( string $sql ): mixed;
@@ -47,6 +49,7 @@ interface WP_PgSQL_Driver_Interface {
 	 * Escape a string value for safe inclusion in a query.
 	 *
 	 * @param string $value Raw value to escape.
+	 *
 	 * @return string Escaped value (without surrounding quotes).
 	 */
 	public function escape_string( string $value ): string;
@@ -69,6 +72,7 @@ interface WP_PgSQL_Driver_Interface {
 	 * Return the auto-generated ID from the last INSERT statement.
 	 *
 	 * @param string $sequence_name PostgreSQL sequence name (required for PgSQL).
+	 *
 	 * @return int|string
 	 */
 	public function insert_id( string $sequence_name = '' );

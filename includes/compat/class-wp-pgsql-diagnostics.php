@@ -121,5 +121,5 @@ class WP_PgSQL_Diagnostics {
 	 *
 	 * @return void
 	 */
-	private function __clone(): void {}
+	private function __clone() {}
 }

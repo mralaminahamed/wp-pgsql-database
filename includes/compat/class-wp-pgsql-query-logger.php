@@ -159,5 +159,5 @@ class WP_PgSQL_Query_Logger {
 	 *
 	 * @return void
 	 */
-	private function __clone(): void {}
+	private function __clone() {}
 }

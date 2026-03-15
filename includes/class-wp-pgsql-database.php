@@ -182,5 +182,5 @@ final class WP_PgSQL_Database {
 	 *
 	 * @return void
 	 */
-	private function __clone(): void {}
+	private function __clone() {}
 }

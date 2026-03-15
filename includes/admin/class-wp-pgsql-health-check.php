@@ -209,5 +209,5 @@ class WP_PgSQL_Health_Check {
 	 *
 	 * @return void
 	 */
-	private function __clone(): void {}
+	private function __clone() {}
 }

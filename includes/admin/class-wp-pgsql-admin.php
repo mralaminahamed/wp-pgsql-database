@@ -245,5 +245,5 @@ define( 'DB_PASSWORD', 'your_password' );</code></pre>
 	 *
 	 * @return void
 	 */
-	private function __clone(): void {}
+	private function __clone() {}
 }

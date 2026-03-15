@@ -69,7 +69,7 @@
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
-                <element value="wc-gocardless-payments"/>
+                <element value="wp-pgsql-database"/>
             </property>
         </properties>
     </rule>
@@ -77,10 +77,9 @@
     <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
         <properties>
             <property name="prefixes" type="array">
-                <element value="WC_GOCARDLESS"/>
-                <element value="wc_gocardless"/>
-                <element value="WC_GoCardless"/>
-                <element value="woocommerce"/>
+                <element value="WP_PGSQL_DB"/>
+                <element value="wp_pgsql_database"/>
+                <element value="WP_PgSQL_Database"/>
             </property>
         </properties>
     </rule>

@@ -71,7 +71,7 @@ interface WP_PgSQL_Driver_Interface {
 	 * @param string $sequence_name PostgreSQL sequence name (required for PgSQL).
 	 * @return int|string
 	 */
-	public function insert_id( string $sequence_name = '' ): int|string;
+	public function insert_id( string $sequence_name = '' );
 
 	/**
 	 * Return the last error message from the driver.

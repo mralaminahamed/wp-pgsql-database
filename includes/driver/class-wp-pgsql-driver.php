@@ -164,7 +164,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function insert_id( string $sequence_name = '' ): int|string {
+	public function insert_id( string $sequence_name = '' ) {
 		if ( null === $this->pdo ) {
 			return 0;
 		}

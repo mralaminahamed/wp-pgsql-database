@@ -1,0 +1,95 @@
+/**
+ * WP PostgreSQL Database — Admin styles
+ *
+ * @package WP_PgSQL_Database
+ * @since   1.0.0
+ */
+
+.wp-pgsql-admin h1 {
+	margin-bottom: 1.5rem;
+}
+
+.wp-pgsql-status-cards {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 420px, 1fr ) );
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+.wp-pgsql-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 1.5rem;
+	box-shadow: 0 1px 1px rgba( 0, 0, 0, .04 );
+}
+
+.wp-pgsql-card h2 {
+	margin-top: 0;
+	font-size: 1rem;
+	font-weight: 600;
+	padding-bottom: .75rem;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.wp-pgsql-card .widefat {
+	margin-bottom: 1rem;
+}
+
+.wp-pgsql-card pre {
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
+	padding: .75rem 1rem;
+	overflow-x: auto;
+	font-size: .8125rem;
+	line-height: 1.6;
+}
+
+.wp-pgsql-card pre code {
+	font-family: Consolas, "Courier New", monospace;
+}
+
+.wp-pgsql-badge {
+	display: inline-block;
+	padding: .2em .6em;
+	border-radius: 3px;
+	font-size: .75rem;
+	font-weight: 600;
+	line-height: 1.4;
+	text-transform: uppercase;
+	letter-spacing: .03em;
+}
+
+.wp-pgsql-badge.success {
+	background: #d1e7dd;
+	color: #0a3622;
+}
+
+.wp-pgsql-badge.warning {
+	background: #fff3cd;
+	color: #664d03;
+}
+
+.wp-pgsql-badge.error {
+	background: #f8d7da;
+	color: #58151c;
+}
+
+.wp-pgsql-actions {
+	display: flex;
+	gap: .5rem;
+	flex-wrap: wrap;
+	margin-top: 1rem;
+}
+
+#wpadminbar #wp-admin-bar-wp-pgsql-database > .ab-item {
+	font-size: .75rem;
+	opacity: .85;
+}
+
+@media ( max-width: 782px ) {
+	.wp-pgsql-status-cards {
+		grid-template-columns: 1fr;
+	}
+}

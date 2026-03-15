@@ -1,0 +1,273 @@
+# Copyright (C) 2026 Your Name
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP PostgreSQL Database 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-pgsql-database\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-15T19:52:58+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wp-pgsql-database\n"
+
+#. Plugin Name of the plugin
+#: wp-pgsql-database.php
+msgid "WP PostgreSQL Database"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: wp-pgsql-database.php
+msgid "https://github.com/your-username/wp-pgsql-database"
+msgstr ""
+
+#. Description of the plugin
+#: wp-pgsql-database.php
+msgid "Adds PostgreSQL database driver support to WordPress via a db.php drop-in, enabling WordPress to run on PostgreSQL without code changes."
+msgstr ""
+
+#. Author of the plugin
+#: wp-pgsql-database.php
+msgid "Your Name"
+msgstr ""
+
+#. Author URI of the plugin
+#: wp-pgsql-database.php
+msgid "https://yourwebsite.com"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:70
+msgid "PostgreSQL Database"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:71
+msgid "PostgreSQL DB"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:85
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:94
+#: includes/admin/class-wp-pgsql-health-check.php:183
+#: includes/compat/class-wp-pgsql-diagnostics.php:83
+msgid "PostgreSQL Database Driver"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:102
+msgid "Drop-in Status"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:106
+msgid "db.php installed"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:107
+msgid "Active"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:107
+msgid "Not installed"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:110
+msgid "Drop-in version"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:111
+msgid "Up to date"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:111
+msgid "Update available"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:114
+msgid "DB_ENGINE constant"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:115
+msgid "pgsql"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:115
+#: includes/admin/class-wp-pgsql-health-check.php:195
+msgid "Not defined"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:118
+#: includes/admin/class-wp-pgsql-health-check.php:186
+msgid "Plugin version"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:130
+msgid "Update Drop-in"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:130
+msgid "Install Drop-in"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:140
+msgid "Remove Drop-in"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:149
+msgid "Configuration"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:150
+msgid "Add the following constant to your wp-config.php to activate the PostgreSQL driver:"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:157
+msgid "The DB_HOST value may include a custom port, e.g. \"localhost:5432\"."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:178
+msgid "Drop-in installed successfully."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:179
+msgid "Drop-in removed."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:180
+msgid "Drop-in installation failed. Please check file permissions."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-admin.php:205
+#: includes/admin/class-wp-pgsql-admin.php:229
+#: includes/compat/class-wp-pgsql-diagnostics.php:97
+msgid "Insufficient permissions."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:64
+msgid "PostgreSQL drop-in"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:69
+msgid "PostgreSQL connection"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:87
+msgid "PostgreSQL drop-in is not installed"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:89
+#: includes/admin/class-wp-pgsql-health-check.php:104
+#: includes/admin/class-wp-pgsql-health-check.php:118
+#: includes/admin/class-wp-pgsql-health-check.php:139
+#: includes/admin/class-wp-pgsql-health-check.php:152
+#: includes/admin/class-wp-pgsql-health-check.php:162
+msgid "Database"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:90
+msgid "The wp-content/db.php drop-in is missing. PostgreSQL driver is inactive."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:94
+msgid "Install drop-in"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:102
+msgid "PostgreSQL drop-in needs updating"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:105
+msgid "A newer version of the db.php drop-in is available."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:109
+msgid "Update drop-in"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:116
+msgid "PostgreSQL drop-in is active and current"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:119
+msgid "The wp-content/db.php drop-in is installed and up to date."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:137
+msgid "Not running on PostgreSQL driver"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:140
+msgid "WordPress is using the default MySQL driver. Define DB_ENGINE=pgsql in wp-config.php to activate PostgreSQL."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:150
+msgid "PostgreSQL connection is unavailable"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:153
+msgid "Could not reach the PostgreSQL server. Check DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME."
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:160
+msgid "PostgreSQL connection is active"
+msgstr ""
+
+#. translators: %s: server version string
+#: includes/admin/class-wp-pgsql-health-check.php:165
+#, php-format
+msgid "Connected to PostgreSQL. Server: %s"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:190
+msgid "Drop-in active"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:191
+msgid "Yes"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:191
+msgid "No"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:194
+msgid "DB_ENGINE"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:198
+msgid "PostgreSQL version"
+msgstr ""
+
+#: includes/admin/class-wp-pgsql-health-check.php:199
+msgid "N/A"
+msgstr ""
+
+#: includes/class-wp-pgsql-database.php:135
+msgid "Connection successful."
+msgstr ""
+
+#: includes/class-wp-pgsql-database.php:136
+msgid "Connection failed."
+msgstr ""
+
+#: includes/class-wp-pgsql-database.php:137
+msgid "Saving…"
+msgstr ""
+
+#: includes/class-wp-pgsql-database.php:138
+msgid "Settings saved."
+msgstr ""
+
+#: includes/compat/class-wp-pgsql-diagnostics.php:80
+msgid "query"
+msgid_plural "queries"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: error message
+#: includes/database/class-wp-pgsql-db.php:78
+#, php-format
+msgid "Failed to connect to PostgreSQL: %s"
+msgstr ""

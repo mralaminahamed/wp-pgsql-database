@@ -55,5 +55,5 @@ add_action(
 );
 
 // Activation / deactivation hooks.
-register_activation_hook( __FILE__, [ \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'activate' ] );
-register_deactivation_hook( __FILE__, [ \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'deactivate' ] );
+register_activation_hook( __FILE__, array( \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'activate' ) );
+register_deactivation_hook( __FILE__, array( \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'deactivate' ) );

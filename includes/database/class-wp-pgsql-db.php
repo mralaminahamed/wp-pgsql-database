@@ -100,7 +100,7 @@ class WP_PgSQL_Db extends wpdb {
 	 * @param string $query MySQL SQL query.
 	 * @return int|bool Number of rows affected/selected, or false on error.
 	 */
-	public function query( $query ): int|bool {
+	public function query( $query ) {
 		if ( ! $this->ready ) {
 			$this->check_current_query = true;
 			return false;

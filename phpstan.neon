@@ -1,0 +1,50 @@
+# PHPStan configuration for WP PostgreSQL Database
+parameters:
+  level: 4
+  phpVersion: 80000
+
+  paths:
+    - wp-pgsql-database.php
+    - includes/
+
+  excludePaths:
+    - vendor/
+    - tests/
+
+  bootstrapFiles:
+    - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+    - vendor/php-stubs/wordpress-tests-stubs/wordpress-tests-stubs.php
+    - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+    - vendor/php-stubs/wp-cli-stubs/wp-cli-commands-stubs.php
+    - vendor/php-stubs/wp-cli-stubs/wp-cli-i18n-stubs.php
+    - vendor/php-stubs/wp-cli-stubs/wp-cli-tools-stubs.php
+
+
+  # WordPress-specific configuration
+  checkExplicitMixedMissingReturn: false
+  checkFunctionNameCase: false
+  checkInternalClassCaseSensitivity: false
+  checkMissingCallableSignature: false
+  checkTooWideReturnTypesInProtectedAndPublicMethods: false
+  checkUninitializedProperties: false
+  treatPhpDocTypesAsCertain: false
+
+  ignoreErrors:
+    # Plugin constants (defined at runtime)
+    - '#Constant WP_PGSQL_[A-Z_]* not found#'
+
+    # WordPress stub property access issues
+    - '#Access to an undefined property WC_Meta_Data::\$.*#'
+
+  dynamicConstantNames:
+    - WP_PGSQL_DB_VERSION
+    - WP_PGSQL_DB_PATH
+    - WP_PGSQL_DB_URL
+    - WP_PGSQL_DB_DROPIN_SOURCE
+    - WP_PGSQL_DB_DROPIN_DEST
+
+  universalObjectCratesClasses:
+    - WP_Post
+    - WP_User
+    - WP_Term
+    - WP_Error

@@ -1,0 +1,59 @@
+{
+    "name": "mralaminahamed/wp-pgsql-database",
+    "description": "PostgreSQL database driver for WordPress via a db.php drop-in.",
+    "type": "wordpress-plugin",
+    "version": "1.0.0",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4",
+        "ext-pdo": "*",
+        "ext-pdo_pgsql": "*"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.3.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
+        "phpcompatibility/phpcompatibility-wp": "^2.1.8",
+        "phpunit/phpunit": "^9.6",
+        "wp-phpunit/wp-phpunit": "^6.8.3",
+        "yoast/phpunit-polyfills": "^4.0.0",
+        "brain/monkey": "^2.0",
+        "phpstan/phpstan": "^2.1.30",
+        "phpstan/extension-installer": "^1.4",
+        "szepeviktor/phpstan-wordpress": "^2.0",
+        "php-stubs/woocommerce-stubs": "^10.4",
+        "php-stubs/woocommerce-subscriptions-stubs": "^8.1"
+    },
+    "autoload": {
+        "classmap": [
+            "includes/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WP_PgSQL_Database\\Tests\\": "tests/php/src"
+        }
+    },
+    "scripts": {
+        "makepot": "wp i18n make-pot . languages/wp-pgsql-database.pot --exclude=node_modules,vendor,docs,release,tests",
+        "release": [
+            "rm -rf release vendor build/*",
+            "@makepot",
+            "mkdir -p release",
+            "composer install --no-dev --optimize-autoloader",
+            "rsync -av --exclude-from=.distignore . release/wp-pgsql-database/",
+            "cd release && zip -r wp-pgsql-database.zip wp-pgsql-database/",
+            "rm -rf release/wp-pgsql-database/",
+            "composer install"
+        ]
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        }
+    }
+}

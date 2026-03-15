@@ -46,13 +46,17 @@ define( 'WP_PGSQL_DB_DROPIN_DEST', WP_CONTENT_DIR . '/db.php' );
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+/**
+ * Bootstrap the plugin and return the instance.
+ *
+ * @return \WP_PgSQL_Database\WP_PgSQL_Database
+ */
+function wp_pgsql_database() {
+	return \WP_PgSQL_Database\WP_PgSQL_Database::get_instance();
+}
+
 // Bootstrap the plugin.
-add_action(
-	'plugins_loaded',
-	function (): void {
-		\WP_PgSQL_Database\WP_PgSQL_Database::get_instance();
-	}
-);
+wp_pgsql_database()->init();
 
 // Activation / deactivation hooks.
 register_activation_hook( __FILE__, array( \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'activate' ) );

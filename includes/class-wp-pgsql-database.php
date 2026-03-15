@@ -46,7 +46,6 @@ final class WP_PgSQL_Database {
 	 */
 	private function __construct() {
 		$this->version = WP_PGSQL_DB_VERSION;
-		$this->init_hooks();
 	}
 
 	/**
@@ -67,21 +66,21 @@ final class WP_PgSQL_Database {
 	 *
 	 * @return void
 	 */
-	private function init_hooks(): void {
-		add_action( 'init', [ $this, 'load_textdomain' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
+	public function init(): void {
+		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 
 		// Boot admin subsystems only in the admin context.
 		if ( is_admin() ) {
-			add_action( 'init', [ $this, 'boot_admin' ], 20 );
+			add_action( 'init', array( $this, 'boot_admin' ), 20 );
 		}
 
 		// Register Site Health integration.
-		add_action( 'init', [ $this, 'boot_health_check' ], 20 );
+		add_action( 'init', array( $this, 'boot_health_check' ), 20 );
 
 		// Diagnostics are loaded when WP_DEBUG is active.
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			add_action( 'init', [ $this, 'boot_diagnostics' ], 30 );
+			add_action( 'init', array( $this, 'boot_diagnostics' ), 30 );
 		}
 	}
 
@@ -113,14 +112,14 @@ final class WP_PgSQL_Database {
 		wp_enqueue_style(
 			'wp-pgsql-database-admin',
 			WP_PGSQL_DB_URL . 'assets/css/admin.css',
-			[],
+			array(),
 			$this->version
 		);
 
 		wp_enqueue_script(
 			'wp-pgsql-database-admin',
 			WP_PGSQL_DB_URL . 'assets/js/admin.js',
-			[ 'jquery' ],
+			array( 'jquery' ),
 			$this->version,
 			true
 		);
@@ -128,16 +127,16 @@ final class WP_PgSQL_Database {
 		wp_localize_script(
 			'wp-pgsql-database-admin',
 			'wpPgsqlDatabase',
-			[
+			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wp_pgsql_database_admin' ),
-				'i18n'    => [
+				'i18n'    => array(
 					'connectionOk'     => __( 'Connection successful.', 'wp-pgsql-database' ),
 					'connectionFailed' => __( 'Connection failed.', 'wp-pgsql-database' ),
 					'saving'           => __( 'Saving…', 'wp-pgsql-database' ),
 					'saved'            => __( 'Settings saved.', 'wp-pgsql-database' ),
-				],
-			]
+				),
+			)
 		);
 	}
 

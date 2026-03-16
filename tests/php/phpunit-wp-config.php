@@ -4,7 +4,7 @@
 
 $wordpress_dir = dirname( __DIR__, 2 ) . '/wordpress/';
 if ( ! is_dir( $wordpress_dir ) ) {
-	$wordpress_dir = dirname( __DIR__, 5 ) . 'phpunit-wp-config.php/';
+	$wordpress_dir = dirname( __DIR__, 5 ) . '/';
 }
 
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
@@ -21,7 +21,11 @@ define( 'WP_DEFAULT_THEME', 'default' );
 // define( 'WP_TESTS_FORCE_KNOWN_BUGS', true );
 
 // Test with WordPress debug mode (default).
+//define( 'WP_DEBUG', true );
 define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
+@ini_set( 'display_errors', 0 );
 
 // ** Database settings ** //
 
@@ -31,7 +35,7 @@ define( 'WP_DEBUG', true );
 
 define( 'DB_NAME', getenv( 'WP_DB_NAME' ) ?: 'wp_phpunit_tests' );
 define( 'DB_USER', getenv( 'WP_DB_USER' ) ?: 'root' );
-define( 'DB_PASSWORD', getenv( 'WP_DB_PASS' ) ?: "" );
+define( 'DB_PASSWORD', getenv( 'WP_DB_PASS' ) ?: "Ap@17011996@" );
 define( 'DB_HOST', getenv( 'WP_DB_HOST' ) ?: 'localhost' );
 define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );

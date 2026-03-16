@@ -393,9 +393,7 @@ class WP_PgSQL_Lexer {
 		}
 
 		$word = substr( $this->source, $start, $this->pos - $start );
-		$type = isset( self::KEYWORDS[ strtoupper( $word ) ] )
-			? WP_PgSQL_Token::TYPE_KEYWORD
-			: WP_PgSQL_Token::TYPE_IDENTIFIER;
+		$type = isset( self::KEYWORDS[ strtoupper( $word ) ] ) ? WP_PgSQL_Token::TYPE_KEYWORD : WP_PgSQL_Token::TYPE_IDENTIFIER;
 
 		return new WP_PgSQL_Token( $type, $word, $start );
 	}

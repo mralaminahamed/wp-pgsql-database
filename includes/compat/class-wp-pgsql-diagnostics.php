@@ -10,6 +10,9 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Compat;
 
+use WP_Admin_Bar;
+use WP_PgSQL_Database\Database\WP_PgSQL_Db;
+
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,18 +57,18 @@ class WP_PgSQL_Diagnostics {
 	/**
 	 * Add a PostgreSQL diagnostics node to the admin toolbar.
 	 *
-	 * @param \WP_Admin_Bar $wp_admin_bar Admin bar instance.
+	 * @param WP_Admin_Bar $wp_admin_bar Admin bar instance.
 	 *
 	 * @return void
 	 */
-	public function add_toolbar_node( \WP_Admin_Bar $wp_admin_bar ): void {
+	public function add_toolbar_node( WP_Admin_Bar $wp_admin_bar ): void {
 		if ( ! is_admin_bar_showing() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
 		global $wpdb;
 
-		if ( ! ( $wpdb instanceof \WP_PgSQL_Database\Database\WP_PgSQL_Db ) ) {
+		if ( ! ( $wpdb instanceof WP_PgSQL_Db ) ) {
 			return;
 		}
 

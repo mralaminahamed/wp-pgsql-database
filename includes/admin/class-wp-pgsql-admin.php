@@ -87,7 +87,7 @@ class WP_PgSQL_Admin {
 
 		$dropin_active  = WP_PgSQL_Installer::is_dropin_active();
 		$dropin_current = WP_PgSQL_Installer::is_dropin_current();
-		$engine_set     = defined( 'DB_ENGINE' ) && 'pgsql' === DB_ENGINE;
+		$engine_set     = defined( 'DB_ENGINE' ) && 'pgsql' === constant( 'DB_ENGINE' );
 		$plugin_version = WP_PGSQL_DB_VERSION;
 		$form_action    = admin_url( 'admin-post.php' );
 
@@ -180,6 +180,21 @@ class WP_PgSQL_Admin {
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Retrieve the admin page hook suffix.
+	 *
+	 * Returns the hook suffix string that WordPress assigns to this plugin's
+	 * admin page when registered via add_management_page(). Can be used for
+	 * hooking scripts/styles specific to this page.
+	 *
+	 * @return string The admin page hook suffix.
+	 * @since 1.0.0
+	 *
+	 */
+	public function get_page_hook(): string {
+		return $this->page_hook;
 	}
 
 	/**

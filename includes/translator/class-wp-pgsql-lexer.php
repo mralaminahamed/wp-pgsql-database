@@ -86,7 +86,6 @@ class WP_PgSQL_Lexer {
 		'SIGNED'         => true,
 		'ZEROFILL'       => true,
 		'IF'             => true,
-		'EXISTS'         => true,
 		'SHOW'           => true,
 		'DESCRIBE'       => true,
 		'EXPLAIN'        => true,
@@ -140,7 +139,6 @@ class WP_PgSQL_Lexer {
 		'FULL'           => true,
 		'STRAIGHT_JOIN'  => true,
 		'FORCE'          => true,
-		'USE'            => true,
 		'LOCK'           => true,
 		'UNLOCK'         => true,
 		'READ'           => true,
@@ -148,6 +146,10 @@ class WP_PgSQL_Lexer {
 		'LOW_PRIORITY'   => true,
 		'HIGH_PRIORITY'  => true,
 		'DELAYED'        => true,
+		'REGEXP'         => true,
+		'RLIKE'          => true,
+		'IFNULL'         => true,
+		'ISNULL'         => true,
 	);
 
 	/**

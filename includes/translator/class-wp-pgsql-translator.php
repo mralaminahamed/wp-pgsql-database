@@ -177,6 +177,9 @@ class WP_PgSQL_Translator {
 			case 'LIMIT':
 				return $this->rewrite_limit();
 
+			case 'DESCRIBE':
+				return $this->rewrite_describe();
+
 			default:
 				$this->advance();
 
@@ -192,12 +195,14 @@ class WP_PgSQL_Translator {
 	private function rewrite_insert(): string {
 		$this->advance(); // consume INSERT
 		$ignore   = false;
-		$fragment = 'INSERT';
+		$fragment = 'INSERT ';
 
 		// Consume optional LOW_PRIORITY / DELAYED / HIGH_PRIORITY.
 		while ( ! $this->is_eof() && $this->current()->is_keyword( 'LOW_PRIORITY', 'DELAYED', 'HIGH_PRIORITY' ) ) {
 			$this->advance();
 		}
+
+		$this->skip_whitespace();
 
 		// Detect IGNORE.
 		if ( ! $this->is_eof() && $this->current()->is_keyword( 'IGNORE' ) ) {
@@ -276,6 +281,66 @@ class WP_PgSQL_Translator {
 		return "LIMIT {$first}";
 	}
 
+	/**
+	 * Rewrite DESCRIBE/DESC table to information_schema query.
+	 *
+	 * @return string
+	 */
+	private function rewrite_describe(): string {
+		$this->advance(); // consume DESCRIBE/DESC
+
+		$this->skip_whitespace();
+
+		if ( $this->is_eof() ) {
+			return 'DESCRIBE';
+		}
+
+		$token = $this->current();
+
+		// If next token is not a valid identifier (table name), treat as ORDER BY DESC.
+		if ( ! $this->is_valid_table_name( $token ) ) {
+			$this->unadvance(); // put the DESC back
+			return 'DESC';
+		}
+
+		// Handle table name (with optional backticks or quotes).
+		$table = trim( $token->value, '`"' );
+		$this->advance();
+
+		return "SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_name = '{$table}' ORDER BY ordinal_position";
+	}
+
+	/**
+	 * Check if token is a valid table name for DESCRIBE.
+	 *
+	 * @param WP_PgSQL_Token $token Token to check.
+	 *
+	 * @return bool
+	 */
+	private function is_valid_table_name( WP_PgSQL_Token $token ): bool {
+		// Valid table names: identifiers (including backtick-quoted), or strings.
+		$type = $token->type;
+
+		if ( WP_PgSQL_Token::TYPE_IDENTIFIER === $type ) {
+			return true;
+		}
+
+		if ( WP_PgSQL_Token::TYPE_STRING === $type ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Put the last token back onto the stream.
+	 *
+	 * @return void
+	 */
+	private function unadvance(): void {
+		--$this->index;
+	}
+
 	// -------------------------------------------------------------------------
 	// SHOW statement translation
 	// -------------------------------------------------------------------------
@@ -305,8 +370,9 @@ class WP_PgSQL_Translator {
 		}
 
 		// SHOW CREATE TABLE.
-		if ( preg_match( '/^SHOW\s+CREATE\s+TABLE/i', $sql ) ) {
-			return "SELECT 'CREATE TABLE (PostgreSQL)' AS \"Create Table\"";
+		if ( preg_match( '/^SHOW\s+CREATE\s+TABLE\s+[`"]?(\w+)[`"]?/i', $sql, $m ) ) {
+			$table = $m[1];
+			return "SELECT 'CREATE TABLE (PostgreSQL)' AS \"Create Table\" FROM information_schema.tables WHERE table_name = '{$table}'";
 		}
 
 		// SHOW INDEX FROM `table`.
@@ -324,6 +390,13 @@ class WP_PgSQL_Translator {
 		// SHOW VARIABLES.
 		if ( preg_match( '/^SHOW\s+(?:GLOBAL\s+|SESSION\s+)?VARIABLES/i', $sql ) ) {
 			return 'SELECT name AS Variable_name, setting AS Value FROM pg_settings';
+		}
+
+		// DESCRIBE table / DESC table.
+		if ( preg_match( '/^(?:DESCRIBE|DESC)\s+[`"]?(\w+)[`"]?/i', $sql, $m ) ) {
+			$table = $m[1];
+
+			return "SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_name = '{$table}' ORDER BY ordinal_position";
 		}
 
 		return null;

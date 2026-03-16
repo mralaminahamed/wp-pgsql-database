@@ -10,6 +10,8 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Migration;
 
+use WP_PgSQL_Database\WP_PgSQL_Filesystem;
+
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,6 +24,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * removal of the db.php drop-in in wp-content/.
  */
 class WP_PgSQL_Installer {
+
+	/**
+	 * Filesystem instance.
+	 *
+	 * @var WP_PgSQL_Filesystem|null
+	 */
+	private static ?WP_PgSQL_Filesystem $filesystem = null;
+
+	/**
+	 * Get the filesystem instance.
+	 *
+	 * @return WP_PgSQL_Filesystem
+	 */
+	private static function get_filesystem(): WP_PgSQL_Filesystem {
+		if ( null === self::$filesystem ) {
+			self::$filesystem = WP_PgSQL_Filesystem::get_instance();
+		}
+
+		return self::$filesystem;
+	}
 
 	/**
 	 * Plugin activation callback.
@@ -58,17 +80,18 @@ class WP_PgSQL_Installer {
 			return false;
 		}
 
-		if ( ! file_exists( WP_PGSQL_DB_DROPIN_SOURCE ) ) {
+		$fs = self::get_filesystem();
+
+		if ( ! $fs->exists( WP_PGSQL_DB_DROPIN_SOURCE ) ) {
 			return false;
 		}
 
 		// If a db.php already exists and was not installed by this plugin, do not overwrite.
-		if ( file_exists( WP_PGSQL_DB_DROPIN_DEST ) && ! self::is_our_dropin() ) {
+		if ( $fs->exists( WP_PGSQL_DB_DROPIN_DEST ) && ! self::is_our_dropin() ) {
 			return false;
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_copy
-		$result = copy( WP_PGSQL_DB_DROPIN_SOURCE, WP_PGSQL_DB_DROPIN_DEST );
+		$result = $fs->copy( WP_PGSQL_DB_DROPIN_SOURCE, WP_PGSQL_DB_DROPIN_DEST, true );
 
 		if ( $result ) {
 			update_option( 'wp_pgsql_db_dropin_installed', true, false );
@@ -83,7 +106,9 @@ class WP_PgSQL_Installer {
 	 * @return bool True on success (or if no drop-in present), false on failure.
 	 */
 	public static function remove_dropin(): bool {
-		if ( ! file_exists( WP_PGSQL_DB_DROPIN_DEST ) ) {
+		$fs = self::get_filesystem();
+
+		if ( ! $fs->exists( WP_PGSQL_DB_DROPIN_DEST ) ) {
 			delete_option( 'wp_pgsql_db_dropin_installed' );
 
 			return true;
@@ -94,8 +119,7 @@ class WP_PgSQL_Installer {
 			return false;
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
-		$result = unlink( WP_PGSQL_DB_DROPIN_DEST );
+		$result = $fs->delete( WP_PGSQL_DB_DROPIN_DEST );
 
 		if ( $result ) {
 			delete_option( 'wp_pgsql_db_dropin_installed' );
@@ -110,14 +134,15 @@ class WP_PgSQL_Installer {
 	 * @return bool
 	 */
 	public static function is_our_dropin(): bool {
-		if ( ! file_exists( WP_PGSQL_DB_DROPIN_DEST ) ) {
+		$fs = self::get_filesystem();
+
+		if ( ! $fs->exists( WP_PGSQL_DB_DROPIN_DEST ) ) {
 			return false;
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content = file_get_contents( WP_PGSQL_DB_DROPIN_DEST );
+		$content = $fs->get_contents( WP_PGSQL_DB_DROPIN_DEST );
 
-		return false !== $content && str_contains( $content, 'WP PostgreSQL Database Drop-in' );
+		return $content !== false && str_contains( $content, 'WP PostgreSQL Database Drop-in' );
 	}
 
 	/**
@@ -126,7 +151,9 @@ class WP_PgSQL_Installer {
 	 * @return bool
 	 */
 	public static function is_dropin_active(): bool {
-		return file_exists( WP_PGSQL_DB_DROPIN_DEST ) && self::is_our_dropin();
+		$fs = self::get_filesystem();
+
+		return $fs->exists( WP_PGSQL_DB_DROPIN_DEST ) && self::is_our_dropin();
 	}
 
 	/**
@@ -139,10 +166,10 @@ class WP_PgSQL_Installer {
 			return false;
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$installed = file_get_contents( WP_PGSQL_DB_DROPIN_DEST );
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$template = file_get_contents( WP_PGSQL_DB_DROPIN_SOURCE );
+		$fs = self::get_filesystem();
+
+		$installed = $fs->get_contents( WP_PGSQL_DB_DROPIN_DEST );
+		$template  = $fs->get_contents( WP_PGSQL_DB_DROPIN_SOURCE );
 
 		if ( false === $installed || false === $template ) {
 			return false;

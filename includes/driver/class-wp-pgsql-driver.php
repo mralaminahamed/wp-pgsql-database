@@ -154,9 +154,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 			return array();
 		}
 
-		$results = $this->last_statement->fetchAll( PDO::FETCH_OBJ );
-
-		return $results !== false ? $results : array();
+		return $this->last_statement->fetchAll( PDO::FETCH_OBJ );
 	}
 
 	/**

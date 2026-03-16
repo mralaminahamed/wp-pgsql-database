@@ -38,21 +38,21 @@ final class WP_PgSQL_Token {
 	 *
 	 * @var string
 	 */
-	public readonly string $type;
+	public string $type;
 
 	/**
 	 * Raw token value as it appeared in the source.
 	 *
 	 * @var string
 	 */
-	public readonly string $value;
+	public string $value;
 
 	/**
 	 * Normalised (uppercase) token value for keyword matching.
 	 *
 	 * @var string
 	 */
-	public readonly string $normalised;
+	public string $normalised;
 
 	/**
 	 * Byte offset of this token within the source string.

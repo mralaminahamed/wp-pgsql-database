@@ -60,10 +60,12 @@ class WP_PgSQL_Db extends wpdb {
 	/**
 	 * Constructor — initialise driver and translation pipeline.
 	 *
-	 * @param string $dbuser Database username.
+	 * @param string $dbuser     Database username.
 	 * @param string $dbpassword Database password.
-	 * @param string $dbname Database name.
-	 * @param string $dbhost Database host (optionally with port).
+	 * @param string $dbname     Database name.
+	 * @param string $dbhost     Database host (optionally with port).
+	 *
+	 * @return void
 	 */
 	public function __construct( string $dbuser, string $dbpassword, string $dbname, string $dbhost ) {
 		$this->pg_driver  = new WP_PgSQL_Driver();
@@ -215,7 +217,7 @@ class WP_PgSQL_Db extends wpdb {
 	 *
 	 * @param string $string Value to escape.
 	 *
-	 * @return string
+	 * @return string Escaped string.
 	 */
 	public function _real_escape( $string ): string {
 		return $this->pg_driver->escape_string( (string) $string );
@@ -251,7 +253,9 @@ class WP_PgSQL_Db extends wpdb {
 	/**
 	 * Check whether the database connection is alive.
 	 *
-	 * @return bool
+	 * @param bool $allow_bail Whether to bail on error (unused, for wpdb API compat).
+	 *
+	 * @return bool True if connected, false otherwise.
 	 */
 	public function check_connection( $allow_bail = true ): bool {
 		return $this->pg_driver->is_connected();

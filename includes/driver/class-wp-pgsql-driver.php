@@ -173,7 +173,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 		}
 
 		try {
-			$sequence = $sequence_name !== '' ? $sequence_name : null;
+			$sequence = '' !== $sequence_name ? $sequence_name : null;
 			$id       = $this->pdo->lastInsertId( $sequence );
 
 			return is_numeric( $id ) ? (int) $id : $id;

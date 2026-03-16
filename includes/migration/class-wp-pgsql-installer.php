@@ -142,7 +142,7 @@ class WP_PgSQL_Installer {
 
 		$content = $fs->get_contents( WP_PGSQL_DB_DROPIN_DEST );
 
-		return $content !== false && str_contains( $content, 'WP PostgreSQL Database Drop-in' );
+		return false !== $content && str_contains( $content, 'WP PostgreSQL Database Drop-in' );
 	}
 
 	/**

@@ -49,15 +49,15 @@ require_once __DIR__ . '/vendor/autoload.php';
 /**
  * Bootstrap the plugin and return the instance.
  *
- * @return \WP_PgSQL_Database\WP_PgSQL_Database
+ * @return WP_PgSQL_Database\WP_PgSQL_Database
  */
 function wp_pgsql_database() {
-	return \WP_PgSQL_Database\WP_PgSQL_Database::get_instance();
+	return WP_PgSQL_Database\WP_PgSQL_Database::get_instance();
 }
 
 // Bootstrap the plugin.
 wp_pgsql_database()->init();
 
 // Activation / deactivation hooks.
-register_activation_hook( __FILE__, array( \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'activate' ) );
-register_deactivation_hook( __FILE__, array( \WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'deactivate' ) );
+register_activation_hook( __FILE__, array( WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'activate' ) );
+register_deactivation_hook( __FILE__, array( WP_PgSQL_Database\Migration\WP_PgSQL_Installer::class, 'deactivate' ) );

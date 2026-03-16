@@ -30,7 +30,7 @@ if ( ! defined( 'WP_PGSQL_DB_VERSION' ) ) {
 }
 
 if ( ! defined( 'WP_PGSQL_DB_PATH' ) ) {
-	define( 'WP_PGSQL_DB_PATH', dirname( __DIR__ ) . 'bootstrap-phpstan.php/' );
+	define( 'WP_PGSQL_DB_PATH', dirname( __DIR__ ) . 'bootstrap.php/' );
 }
 
 if ( ! defined( 'WP_PGSQL_DB_URL' ) ) {

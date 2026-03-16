@@ -32,11 +32,11 @@ PostgreSQL database driver for WordPress via a db.php drop-in. Enables WordPress
 # All tests
 ./vendor/bin/phpunit
 
-# Single test file
-./vendor/bin/phpunit tests/php/src/unit/test-wp-pgsql-lexer.php
+# Single test file (PSR-4 style)
+./vendor/bin/phpunit tests/php/src/Unit/Translator/TranslatorTest.php
 
 # Specific test method
-./vendor/bin/phpunit --filter test_tokenize_select
+./vendor/bin/phpunit --filter test_translate_select_returns_postgresql
 
 # Integration tests (requires live PostgreSQL)
 export DB_ENGINE=pgsql DB_HOST=localhost DB_NAME=wp_test DB_USER=wp_user DB_PASSWORD=secret
@@ -68,7 +68,8 @@ WP_PgSQL_Database\
 ├── Driver\
 ├── Migration\
 ├── Schema\
-└── Translator\
+├── Translator\
+└── Filesystem\
 ```
 
 Class file format: `class-wp-pgsql-*.php`
@@ -166,10 +167,13 @@ $msg = sprintf( __( 'Error in %s', 'wp-pgsql-database' ), $table );
 ```
 includes/
 ├── class-wp-pgsql-database.php   # Main plugin class
-├── database/                    # Core database class (extends wpdb)
+├── class-wp-pgsql-filesystem.php # Filesystem wrapper
+├── database/                     # Core database class (extends wpdb)
 ├── driver/                      # PDO PostgreSQL driver
-├── translator/                   # MySQL to PostgreSQL translation
-├── lexer/                        # SQL query tokenizer
+├── translator/                  # MySQL to PostgreSQL translation
+│   ├── class-wp-pgsql-lexer.php
+│   ├── class-wp-pgsql-token.php
+│   └── class-wp-pgsql-translator.php
 ├── schema/                      # Schema mapper
 ├── migration/                   # Installation/migration
 ├── admin/                       # Admin UI and health checks
@@ -182,16 +186,40 @@ includes/
 
 - Tests in `tests/php/src/` mirroring class path
 - Use PHPUnit with Brain Monkey for WP mocking
-- Test naming: `test-wp-pgsql-*.php`
+- Test naming: PSR-4 style with `Test.php` suffix (e.g., `DbTest.php`, `DriverTest.php`)
+- Namespace: `WP_PgSQL_Database\Tests\Unit\<Namespace>`
 
 ```php
-class WP_PgSQL_Translator_Test extends \PHPUnit\Framework\TestCase {
+namespace WP_PgSQL_Database\Tests\Unit\Translator;
+
+use PHPUnit\Framework\TestCase;
+
+class TranslatorTest extends TestCase {
     public function test_translate_select_returns_postgresql() {
-        $translator = new WP_PgSQL_Translator();
+        $translator = new WP_PgSQL_Translator( new WP_PgSQL_Lexer() );
         $result     = $translator->translate( 'SELECT * FROM wp_posts' );
         $this->assertStringContainsString( 'wp_posts', $result );
     }
 }
+```
+
+### Test Commands
+```bash
+# All tests
+./vendor/bin/phpunit
+
+# Single test file (PSR-4 style)
+./vendor/bin/phpunit tests/php/src/Unit/Translator/TranslatorTest.php
+
+# Specific test method
+./vendor/bin/phpunit --filter test_translate_select_returns_postgresql
+
+# Unit tests only
+./vendor/bin/phpunit --testsuite Unit
+
+# Integration tests (requires live PostgreSQL)
+export DB_ENGINE=pgsql DB_HOST=localhost DB_NAME=wp_test DB_USER=wp_user DB_PASSWORD=secret
+./vendor/bin/phpunit --testsuite Integration
 ```
 
 ---
@@ -236,6 +264,7 @@ WordPress core / plugins
 5. Sanitize all input — never trust `$_GET`, `$_POST`, `$_REQUEST`
 6. Escape all output
 7. The drop-in (`db.copy`) should never be edited directly
+8. Never commit `tests/php/phpunit-wp-config.php` — it contains database credentials
 
 ---
 

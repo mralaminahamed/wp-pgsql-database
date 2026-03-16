@@ -58,11 +58,11 @@ wp-pgsql-database/
 
 ## Requirements
 
-| Requirement | Version |
-|---|---|
-| PHP | 8.0+ |
-| WordPress | 6.0+ |
-| PostgreSQL | 12+ |
+| Requirement | Version            |
+|---|--------------------|
+| PHP | 7.4+               |
+| WordPress | 6.0+               |
+| PostgreSQL | 12+                |
 | PHP extensions | `pdo`, `pdo_pgsql` |
 
 ---
@@ -73,10 +73,10 @@ wp-pgsql-database/
 
 ```bash
 # Via Composer
-composer require your-username/wp-pgsql-database
+composer require mralaminahamed/wp-pgsql-database
 
 # Or clone directly
-git clone https://github.com/your-username/wp-pgsql-database.git \
+git clone https://github.com/mralaminahamed/wp-pgsql-database.git \
   wp-content/plugins/wp-pgsql-database
 ```
 

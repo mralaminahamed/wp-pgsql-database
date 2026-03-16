@@ -109,7 +109,7 @@ class WP_PgSQL_Db extends wpdb {
 		}
 
 		// Allow plugins to filter the query (same as core wpdb).
-		$query = apply_filters( 'query', $query );
+		$query = apply_filters( 'query', $query ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		if ( ! $query ) {
 			$this->insert_id = 0;

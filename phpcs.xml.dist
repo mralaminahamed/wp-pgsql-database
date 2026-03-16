@@ -40,13 +40,15 @@
 
         <!-- Additional specific rules -->
         <exclude name="Squiz.PHP.CommentedOutCode.Found"/>
+        <exclude name="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure"/>
         <exclude name="Universal.Files.SeparateFunctionsFromOO.Mixed"/>
         <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.classFound"/>
         <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.defaultFound"/>
+        <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.stringFound"/>
         <exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
         <exclude name="Generic.CodeAnalysis.AssignmentInCondition.Found"/>
-        <exclude name="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure"/>
         <exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
     </rule>
 
     <!-- Let's also check that everything is properly documented. -->

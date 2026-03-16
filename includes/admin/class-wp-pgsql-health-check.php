@@ -10,6 +10,7 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Admin;
 
+use WP_PgSQL_Database\Database\WP_PgSQL_Db;
 use WP_PgSQL_Database\Migration\WP_PgSQL_Installer;
 
 // Prevent direct access.
@@ -140,7 +141,7 @@ class WP_PgSQL_Health_Check {
 	public function test_connection(): array {
 		global $wpdb;
 
-		$is_pgsql = $wpdb instanceof \WP_PgSQL_Database\Database\WP_PgSQL_Db;
+		$is_pgsql = $wpdb instanceof WP_PgSQL_Db;
 
 		if ( ! $is_pgsql ) {
 			return array(
@@ -212,11 +213,11 @@ class WP_PgSQL_Health_Check {
 				),
 				'db_engine'      => array(
 					'label' => __( 'DB_ENGINE', 'wp-pgsql-database' ),
-					'value' => defined( 'DB_ENGINE' ) ? DB_ENGINE : __( 'Not defined', 'wp-pgsql-database' ),
+					'value' => defined( 'DB_ENGINE' ) ? constant( 'DB_ENGINE' ) : __( 'Not defined', 'wp-pgsql-database' ),
 				),
 				'server_version' => array(
 					'label' => __( 'PostgreSQL version', 'wp-pgsql-database' ),
-					'value' => ( $wpdb instanceof \WP_PgSQL_Database\Database\WP_PgSQL_Db ) ? $wpdb->db_version() : __( 'N/A', 'wp-pgsql-database' ),
+					'value' => ( $wpdb instanceof WP_PgSQL_Db ) ? $wpdb->db_version() : __( 'N/A', 'wp-pgsql-database' ),
 				),
 			),
 		);

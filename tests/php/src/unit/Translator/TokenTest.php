@@ -9,8 +9,7 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Tests\Unit\Translator;
 
-use PHPUnit\Framework\TestCase;
-use Brain\Monkey;
+use WP_PgSQL_Database\Tests\Unit\WPPgSQLDatabaseTestCase;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Token;
 
 /**
@@ -18,27 +17,7 @@ use WP_PgSQL_Database\Translator\WP_PgSQL_Token;
  *
  * @covers \WP_PgSQL_Database\Translator\WP_PgSQL_Token
  */
-class TokenTest extends TestCase {
-
-	/**
-	 * Set up Brain\Monkey before each test.
-	 *
-	 * @return void
-	 */
-	protected function setUp(): void {
-		parent::setUp();
-		Monkey\setUp();
-	}
-
-	/**
-	 * Tear down Brain\Monkey after each test.
-	 *
-	 * @return void
-	 */
-	protected function tearDown(): void {
-		Monkey\tearDown();
-		parent::tearDown();
-	}
+class TokenTest extends WPPgSQLDatabaseTestCase {
 
 	/**
 	 * @test

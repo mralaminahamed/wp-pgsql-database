@@ -9,8 +9,7 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Tests\Unit\Driver;
 
-use PHPUnit\Framework\TestCase;
-use Brain\Monkey;
+use WP_PgSQL_Database\Tests\Unit\WPPgSQLDatabaseTestCase;
 use WP_PgSQL_Database\Driver\WP_PgSQL_Driver;
 
 /**
@@ -18,7 +17,7 @@ use WP_PgSQL_Database\Driver\WP_PgSQL_Driver;
  *
  * @covers \WP_PgSQL_Database\Driver\WP_PgSQL_Driver
  */
-class DriverTest extends TestCase {
+class DriverTest extends WPPgSQLDatabaseTestCase {
 
 	/**
 	 * Driver under test.
@@ -32,16 +31,7 @@ class DriverTest extends TestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		Monkey\setUp();
 		$this->driver = new WP_PgSQL_Driver();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function tearDown(): void {
-		Monkey\tearDown();
-		parent::tearDown();
 	}
 
 	/**

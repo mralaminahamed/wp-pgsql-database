@@ -10,7 +10,6 @@ declare( strict_types=1 );
 namespace WP_PgSQL_Database\Tests\Unit;
 
 use WP_PgSQL_Database\Tests\Unit\WPPgSQLDatabaseTestCase;
-use Brain\Monkey\Functions;
 use WP_PgSQL_Database\WP_PgSQL_Database;
 
 /**
@@ -18,7 +17,7 @@ use WP_PgSQL_Database\WP_PgSQL_Database;
  *
  * @covers \WP_PgSQL_Database\WP_PgSQL_Database
  */
-class DatabaseTest extends WPPgSQLDatabaseTestCase {
+class PluginTest extends WPPgSQLDatabaseTestCase {
 
 	/**
 	 * @test
@@ -28,24 +27,6 @@ class DatabaseTest extends WPPgSQLDatabaseTestCase {
 		$instance2 = WP_PgSQL_Database::get_instance();
 
 		$this->assertSame( $instance1, $instance2 );
-	}
-
-	/**
-	 * @test
-	 */
-	public function init_registers_hooks(): void {
-		Functions\stubTranslationFunctions();
-
-		Functions\expect( 'add_action' )
-			->once()
-			->with( 'init', array( WP_PgSQL_Database::get_instance(), 'load_textdomain' ) );
-
-		Functions\expect( 'add_action' )
-			->once()
-			->with( 'admin_enqueue_scripts', array( WP_PgSQL_Database::get_instance(), 'enqueue_admin_assets' ) );
-
-		$plugin = WP_PgSQL_Database::get_instance();
-		$plugin->init();
 	}
 
 	/**

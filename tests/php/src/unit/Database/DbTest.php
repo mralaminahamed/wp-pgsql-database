@@ -10,29 +10,12 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Tests\Unit\Database;
 
-use Brain\Monkey;
-use PHPUnit\Framework\TestCase;
+use WP_PgSQL_Database\Tests\Unit\WPPgSQLDatabaseTestCase;
 
 /**
  * Test case for WP_PgSQL_Db class.
  */
-class DbTest extends TestCase {
-
-	/**
-	 * Set up the test.
-	 */
-	protected function setUp(): void {
-		parent::setUp();
-		Monkey\setUp();
-	}
-
-	/**
-	 * Tear down the test.
-	 */
-	protected function tearDown(): void {
-		Monkey\tearDown();
-		parent::tearDown();
-	}
+class DbTest extends WPPgSQLDatabaseTestCase {
 
 	/**
 	 * Test class exists.

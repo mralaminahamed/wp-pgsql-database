@@ -9,8 +9,7 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Tests\Unit\Schema;
 
-use PHPUnit\Framework\TestCase;
-use Brain\Monkey;
+use WP_PgSQL_Database\Tests\Unit\WPPgSQLDatabaseTestCase;
 use WP_PgSQL_Database\Schema\WP_PgSQL_Schema_Mapper;
 
 /**
@@ -18,7 +17,7 @@ use WP_PgSQL_Database\Schema\WP_PgSQL_Schema_Mapper;
  *
  * @covers \WP_PgSQL_Database\Schema\WP_PgSQL_Schema_Mapper
  */
-class SchemaMapperTest extends TestCase {
+class SchemaMapperTest extends WPPgSQLDatabaseTestCase {
 
 	/**
 	 * Schema mapper under test.
@@ -32,16 +31,7 @@ class SchemaMapperTest extends TestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		Monkey\setUp();
 		$this->mapper = new WP_PgSQL_Schema_Mapper();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function tearDown(): void {
-		Monkey\tearDown();
-		parent::tearDown();
 	}
 
 	/**

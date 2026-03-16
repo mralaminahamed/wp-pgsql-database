@@ -9,8 +9,7 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Tests\Unit\Translator;
 
-use PHPUnit\Framework\TestCase;
-use Brain\Monkey;
+use WP_PgSQL_Database\Tests\Unit\WPPgSQLDatabaseTestCase;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Lexer;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Token;
 
@@ -19,7 +18,7 @@ use WP_PgSQL_Database\Translator\WP_PgSQL_Token;
  *
  * @covers \WP_PgSQL_Database\Translator\WP_PgSQL_Lexer
  */
-class LexerTest extends TestCase {
+class LexerTest extends WPPgSQLDatabaseTestCase {
 
 	/**
 	 * Lexer under test.
@@ -33,16 +32,7 @@ class LexerTest extends TestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		Monkey\setUp();
 		$this->lexer = new WP_PgSQL_Lexer();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function tearDown(): void {
-		Monkey\tearDown();
-		parent::tearDown();
 	}
 
 	/**

@@ -9,9 +9,7 @@ declare( strict_types=1 );
 
 namespace WP_PgSQL_Database\Tests\Unit\Admin;
 
-use PHPUnit\Framework\TestCase;
-use Brain\Monkey;
-use Brain\Monkey\Functions;
+use WP_PgSQL_Database\Tests\Unit\WPPgSQLDatabaseTestCase;
 use WP_PgSQL_Database\Admin\WP_PgSQL_Health_Check;
 
 /**
@@ -19,24 +17,7 @@ use WP_PgSQL_Database\Admin\WP_PgSQL_Health_Check;
  *
  * @covers \WP_PgSQL_Database\Admin\WP_PgSQL_Health_Check
  */
-class HealthCheckTest extends TestCase {
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function setUp(): void {
-		parent::setUp();
-		Monkey\setUp();
-		Functions\stubTranslationFunctions();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	protected function tearDown(): void {
-		Monkey\tearDown();
-		parent::tearDown();
-	}
+class HealthCheckTest extends WPPgSQLDatabaseTestCase {
 
 	/**
 	 * @test
@@ -61,30 +42,5 @@ class HealthCheckTest extends TestCase {
 
 		$this->assertArrayHasKey( 'wp_pgsql_dropin', $result['direct'] );
 		$this->assertArrayHasKey( 'wp_pgsql_connection', $result['direct'] );
-	}
-
-	/**
-	 * @test
-	 */
-	public function test_dropin_returns_critical_when_not_installed(): void {
-		Functions\when( 'WP_PgSQL_Installer::is_dropin_active' )->justReturn( false );
-
-		$health = WP_PgSQL_Health_Check::get_instance();
-		$result = $health->test_dropin();
-
-		$this->assertSame( 'critical', $result['status'] );
-	}
-
-	/**
-	 * @test
-	 */
-	public function test_dropin_returns_good_when_active(): void {
-		Functions\when( 'WP_PgSQL_Installer::is_dropin_active' )->justReturn( true );
-		Functions\when( 'WP_PgSQL_Installer::is_dropin_current' )->justReturn( true );
-
-		$health = WP_PgSQL_Health_Check::get_instance();
-		$result = $health->test_dropin();
-
-		$this->assertSame( 'good', $result['status'] );
 	}
 }

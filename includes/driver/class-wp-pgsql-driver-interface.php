@@ -43,7 +43,7 @@ interface WP_PgSQL_Driver_Interface {
 	 *
 	 * @return mixed Result resource, row count, or false on error.
 	 */
-	public function query( string $sql ): mixed;
+	public function query( string $sql );
 
 	/**
 	 * Escape a string value for safe inclusion in a query.

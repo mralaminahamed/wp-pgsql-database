@@ -2,35 +2,46 @@
 /**
  * Unit tests for WP_PgSQL_Driver.
  *
- * @package WP_PgSQL_Database\Tests\Unit
+ * @package WP_PgSQL_Database\Tests
  */
 
 declare( strict_types=1 );
 
-namespace WP_PgSQL_Database\Tests\unit;
+namespace WP_PgSQL_Database\Tests\Unit\Driver;
 
+use PHPUnit\Framework\TestCase;
+use Brain\Monkey;
 use WP_PgSQL_Database\Driver\WP_PgSQL_Driver;
 
 /**
- * Class Test_WP_PgSQL_Driver
+ * Class DriverTest
  *
  * @covers \WP_PgSQL_Database\Driver\WP_PgSQL_Driver
  */
-class Test_WP_PgSQL_Driver extends WP_PgSQL_Test_Case {
+class DriverTest extends TestCase {
 
 	/**
 	 * Driver under test.
 	 *
 	 * @var WP_PgSQL_Driver
 	 */
-	private WP_PgSQL_Driver $driver;
+	private $driver;
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function setUp(): void {
 		parent::setUp();
+		Monkey\setUp();
 		$this->driver = new WP_PgSQL_Driver();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function tearDown(): void {
+		Monkey\tearDown();
+		parent::tearDown();
 	}
 
 	/**

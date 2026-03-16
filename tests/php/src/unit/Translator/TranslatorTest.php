@@ -2,36 +2,47 @@
 /**
  * Unit tests for WP_PgSQL_Translator.
  *
- * @package WP_PgSQL_Database\Tests\Unit
+ * @package WP_PgSQL_Database\Tests
  */
 
 declare( strict_types=1 );
 
-namespace WP_PgSQL_Database\Tests\unit;
+namespace WP_PgSQL_Database\Tests\Unit\Translator;
 
+use PHPUnit\Framework\TestCase;
+use Brain\Monkey;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Lexer;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Translator;
 
 /**
- * Class Test_WP_PgSQL_Translator
+ * Class TranslatorTest
  *
  * @covers \WP_PgSQL_Database\Translator\WP_PgSQL_Translator
  */
-class Test_WP_PgSQL_Translator extends WP_PgSQL_Test_Case {
+class TranslatorTest extends TestCase {
 
 	/**
 	 * Translator under test.
 	 *
 	 * @var WP_PgSQL_Translator
 	 */
-	private WP_PgSQL_Translator $translator;
+	private $translator;
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function setUp(): void {
 		parent::setUp();
+		Monkey\setUp();
 		$this->translator = new WP_PgSQL_Translator( new WP_PgSQL_Lexer() );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function tearDown(): void {
+		Monkey\tearDown();
+		parent::tearDown();
 	}
 
 	/**
@@ -145,7 +156,6 @@ class Test_WP_PgSQL_Translator extends WP_PgSQL_Test_Case {
 		$sql    = 'SELECT id, title FROM posts WHERE id = 1 ORDER BY id ASC LIMIT 10';
 		$result = $this->translator->translate( $sql );
 
-		// No backticks, no MySQL-specific syntax — output should be structurally identical.
 		$this->assertStringContainsString( 'SELECT', $result );
 		$this->assertStringContainsString( 'FROM posts', $result );
 		$this->assertStringContainsString( 'LIMIT 10', $result );

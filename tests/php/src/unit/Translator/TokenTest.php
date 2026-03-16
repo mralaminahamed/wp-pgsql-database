@@ -2,21 +2,43 @@
 /**
  * Unit tests for WP_PgSQL_Token.
  *
- * @package WP_PgSQL_Database\Tests\Unit
+ * @package WP_PgSQL_Database\Tests
  */
 
 declare( strict_types=1 );
 
-namespace WP_PgSQL_Database\Tests\unit;
+namespace WP_PgSQL_Database\Tests\Unit\Translator;
 
+use PHPUnit\Framework\TestCase;
+use Brain\Monkey;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Token;
 
 /**
- * Class Test_WP_PgSQL_Token
+ * Class TokenTest
  *
  * @covers \WP_PgSQL_Database\Translator\WP_PgSQL_Token
  */
-class Test_WP_PgSQL_Token extends WP_PgSQL_Test_Case {
+class TokenTest extends TestCase {
+
+	/**
+	 * Set up Brain\Monkey before each test.
+	 *
+	 * @return void
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+		Monkey\setUp();
+	}
+
+	/**
+	 * Tear down Brain\Monkey after each test.
+	 *
+	 * @return void
+	 */
+	protected function tearDown(): void {
+		Monkey\tearDown();
+		parent::tearDown();
+	}
 
 	/**
 	 * @test

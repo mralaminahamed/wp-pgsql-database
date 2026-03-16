@@ -2,36 +2,47 @@
 /**
  * Unit tests for WP_PgSQL_Lexer.
  *
- * @package WP_PgSQL_Database\Tests\Unit
+ * @package WP_PgSQL_Database\Tests
  */
 
 declare( strict_types=1 );
 
-namespace WP_PgSQL_Database\Tests\unit;
+namespace WP_PgSQL_Database\Tests\Unit\Translator;
 
+use PHPUnit\Framework\TestCase;
+use Brain\Monkey;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Lexer;
 use WP_PgSQL_Database\Translator\WP_PgSQL_Token;
 
 /**
- * Class Test_WP_PgSQL_Lexer
+ * Class LexerTest
  *
  * @covers \WP_PgSQL_Database\Translator\WP_PgSQL_Lexer
  */
-class Test_WP_PgSQL_Lexer extends WP_PgSQL_Test_Case {
+class LexerTest extends TestCase {
 
 	/**
 	 * Lexer under test.
 	 *
 	 * @var WP_PgSQL_Lexer
 	 */
-	private WP_PgSQL_Lexer $lexer;
+	private $lexer;
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function setUp(): void {
 		parent::setUp();
+		Monkey\setUp();
 		$this->lexer = new WP_PgSQL_Lexer();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function tearDown(): void {
+		Monkey\tearDown();
+		parent::tearDown();
 	}
 
 	/**
@@ -41,7 +52,9 @@ class Test_WP_PgSQL_Lexer extends WP_PgSQL_Test_Case {
 		$tokens = $this->lexer->tokenise( 'SELECT 1' );
 
 		$significant = array_values(
-			array_filter( $tokens, fn( WP_PgSQL_Token $t ) => $t->is_significant() )
+			array_filter( $tokens, function ( $t ) {
+				return $t instanceof WP_PgSQL_Token && $t->is_significant();
+			} )
 		);
 
 		$this->assertSame( WP_PgSQL_Token::TYPE_KEYWORD, $significant[0]->type );
@@ -84,7 +97,9 @@ class Test_WP_PgSQL_Lexer extends WP_PgSQL_Test_Case {
 	 */
 	public function it_skips_block_comments(): void {
 		$tokens   = $this->lexer->tokenise( '/* comment */ SELECT 1' );
-		$comments = array_filter( $tokens, fn( $t ) => WP_PgSQL_Token::TYPE_COMMENT === $t->type );
+		$comments = array_filter( $tokens, function ( $t ) {
+			return $t instanceof WP_PgSQL_Token && WP_PgSQL_Token::TYPE_COMMENT === $t->type;
+		} );
 
 		$this->assertCount( 1, $comments );
 	}
@@ -94,7 +109,9 @@ class Test_WP_PgSQL_Lexer extends WP_PgSQL_Test_Case {
 	 */
 	public function it_skips_line_comments(): void {
 		$tokens   = $this->lexer->tokenise( "-- comment\nSELECT 1" );
-		$comments = array_filter( $tokens, fn( $t ) => WP_PgSQL_Token::TYPE_COMMENT === $t->type );
+		$comments = array_filter( $tokens, function ( $t ) {
+			return $t instanceof WP_PgSQL_Token && WP_PgSQL_Token::TYPE_COMMENT === $t->type;
+		} );
 
 		$this->assertCount( 1, $comments );
 	}
@@ -126,7 +143,9 @@ class Test_WP_PgSQL_Lexer extends WP_PgSQL_Test_Case {
 		$tokens = $this->lexer->tokenise( '42 3.14' );
 
 		$numbers = array_values(
-			array_filter( $tokens, fn( $t ) => WP_PgSQL_Token::TYPE_NUMBER === $t->type )
+			array_filter( $tokens, function ( $t ) {
+				return $t instanceof WP_PgSQL_Token && WP_PgSQL_Token::TYPE_NUMBER === $t->type;
+			} )
 		);
 
 		$this->assertCount( 2, $numbers );

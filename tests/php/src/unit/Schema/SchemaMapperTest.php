@@ -2,35 +2,46 @@
 /**
  * Unit tests for WP_PgSQL_Schema_Mapper.
  *
- * @package WP_PgSQL_Database\Tests\Unit
+ * @package WP_PgSQL_Database\Tests
  */
 
 declare( strict_types=1 );
 
-namespace WP_PgSQL_Database\Tests\unit;
+namespace WP_PgSQL_Database\Tests\Unit\Schema;
 
+use PHPUnit\Framework\TestCase;
+use Brain\Monkey;
 use WP_PgSQL_Database\Schema\WP_PgSQL_Schema_Mapper;
 
 /**
- * Class Test_WP_PgSQL_Schema_Mapper
+ * Class SchemaMapperTest
  *
  * @covers \WP_PgSQL_Database\Schema\WP_PgSQL_Schema_Mapper
  */
-class Test_WP_PgSQL_Schema_Mapper extends WP_PgSQL_Test_Case {
+class SchemaMapperTest extends TestCase {
 
 	/**
 	 * Schema mapper under test.
 	 *
 	 * @var WP_PgSQL_Schema_Mapper
 	 */
-	private WP_PgSQL_Schema_Mapper $mapper;
+	private $mapper;
 
 	/**
 	 * @inheritDoc
 	 */
 	protected function setUp(): void {
 		parent::setUp();
+		Monkey\setUp();
 		$this->mapper = new WP_PgSQL_Schema_Mapper();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function tearDown(): void {
+		Monkey\tearDown();
+		parent::tearDown();
 	}
 
 	/**

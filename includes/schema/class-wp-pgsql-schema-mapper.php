@@ -131,17 +131,30 @@ class WP_PgSQL_Schema_Mapper {
 	 * @return string Rewritten DDL.
 	 */
 	private function remap_types( string $sql ): string {
-		foreach ( self::TYPE_MAP as $mysql_type => $pgsql_type ) {
-			// Build a regex that matches the type (with optional precision/scale).
+		// Order matters: match more specific patterns first (e.g., TINYINT(1) before TINYINT).
+		$ordered_map = array(
+			'TINYINT(1)' => 'BOOLEAN',
+			'JSON'        => 'JSONB',
+		);
+
+		foreach ( $ordered_map as $mysql_type => $pgsql_type ) {
 			$escaped = preg_quote( $mysql_type, '/' );
+			$sql     = preg_replace( '/' . $escaped . '/i', $pgsql_type, $sql ) ?? $sql;
+		}
+
+		foreach ( self::TYPE_MAP as $mysql_type => $pgsql_type ) {
+			if ( isset( $ordered_map[ $mysql_type ] ) ) {
+				continue;
+			}
 
 			if ( in_array( $mysql_type, array( 'TINYINT(1)', 'JSON' ), true ) ) {
-				// Exact match for parameterised types.
-				$sql = preg_replace( "/\b{$escaped}\b/i", $pgsql_type, $sql ) ?? $sql;
-			} else {
-				// Match type followed optionally by (precision) or (precision, scale).
-				$sql = preg_replace( "/\b{$escaped}(\s*\(\s*\d+\s*(?:,\s*\d+\s*)?\))?/i", $pgsql_type . '$1', $sql ) ?? $sql;
+				continue;
 			}
+
+			$escaped = preg_quote( $mysql_type, '/' );
+
+			// Match type followed optionally by (precision) or (precision, scale).
+			$sql = preg_replace( "/\b{$escaped}(\s*\(\s*\d+\s*(?:,\s*\d+\s*)?\))?/i", $pgsql_type . '$1', $sql ) ?? $sql;
 		}
 
 		return $sql;

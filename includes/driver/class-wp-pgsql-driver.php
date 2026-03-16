@@ -100,7 +100,7 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function query( string $sql ): mixed {
+	public function query( string $sql ) {
 		if ( null === $this->pdo ) {
 			$this->last_error = 'No active database connection.';
 
@@ -154,7 +154,9 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 			return array();
 		}
 
-		return $this->last_statement->fetchAll( PDO::FETCH_OBJ ) ?: array();
+		$results = $this->last_statement->fetchAll( PDO::FETCH_OBJ );
+
+		return $results !== false ? $results : array();
 	}
 
 	/**
@@ -173,7 +175,8 @@ class WP_PgSQL_Driver implements WP_PgSQL_Driver_Interface {
 		}
 
 		try {
-			$id = $this->pdo->lastInsertId( $sequence_name ?: null );
+			$sequence = $sequence_name !== '' ? $sequence_name : null;
+			$id       = $this->pdo->lastInsertId( $sequence );
 
 			return is_numeric( $id ) ? (int) $id : $id;
 		} catch ( PDOException $e ) {

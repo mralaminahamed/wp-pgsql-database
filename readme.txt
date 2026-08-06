@@ -2,7 +2,7 @@
 Contributors:      mralaminahamed
 Tags:              database, postgresql, pgsql, db driver, wpdb
 Requires at least: 6.0
-Tested up to:      6.7
+Tested up to:      6.9
 Requires PHP:      8.0
 Stable tag:        1.0.0
 License:           GPL-2.0-or-later
@@ -188,14 +188,6 @@ Install development dependencies with `composer install`, then:
     DB_ENGINE=pgsql DB_HOST=localhost DB_NAME=wp_test \
     DB_USER=wp_user DB_PASSWORD=secret \
     composer test -- --testsuite Integration
-
-== Screenshots ==
-
-1. Tools › PostgreSQL DB — drop-in status dashboard showing connection status,
-   drop-in version, and `DB_ENGINE` constant detection.
-2. Tools › Site Health — PostgreSQL-specific health checks integrated into the
-   native WordPress Site Health screen.
-3. Admin toolbar query counter active in WP_DEBUG mode.
 
 == Changelog ==
 
